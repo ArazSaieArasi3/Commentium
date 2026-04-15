@@ -59,6 +59,12 @@ The model can be understood as consisting of five interconnected subdomains:
 
 This structure supports semantic clarity while remaining extensible across platforms and analytical contexts.
 
+## Ontology Diagram
+
+The conceptual structure of Commentium is visually summarized in the ontology diagram available in this repository.
+
+![Commentium Ontology Diagram](Commentium-G2-Version21.jpg)
+
 ## Core Concepts
 
 | Concept | Stereotype | Description |

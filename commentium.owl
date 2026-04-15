@@ -1,0 +1,585 @@
+<?xml version="1.0" encoding="utf-8"?>
+<rdf:RDF
+  xmlns:dcterms="http://purl.org/dc/terms/"
+  xmlns:owl="http://www.w3.org/2002/07/owl#"
+  xmlns:commentium="https://w3id.org/commentium#"
+  xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+  xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+>
+  <owl:ObjectProperty rdf:about="https://w3id.org/commentium#isAboutOrDirectedTo">
+    <rdfs:label>isAboutOrDirectedTo</rdfs:label>
+    <rdfs:comment>Associates a comment with its subject role.</rdfs:comment>
+    <rdfs:domain rdf:resource="https://w3id.org/commentium#Comment"/>
+    <rdfs:range rdf:resource="https://w3id.org/commentium#CommentSubject"/>
+    <rdfs:isDefinedBy>
+      <owl:Ontology rdf:about="https://w3id.org/commentium">
+        <dcterms:title>Commentium Ontology</dcterms:title>
+        <dcterms:description>Ontology for modeling, integrating, and interpreting comments across heterogeneous social platforms as context-embedded communicative events, operationalized in OWL 2 from the Commentium v1.0 conceptual architecture.</dcterms:description>
+        <owl:versionInfo>1.0</owl:versionInfo>
+        <rdfs:label>Commentium Ontology</rdfs:label>
+        <owl:versionIRI rdf:resource="https://w3id.org/commentium/1.0"/>
+        <rdfs:comment>Initial OWL operationalization of the Commentium ontology for explainable and interoperable comment analysis.</rdfs:comment>
+        <dcterms:creator>Araz Saie Arasi</dcterms:creator>
+        <dcterms:creator>Aidin Ziapour Sohi</dcterms:creator>
+        <dcterms:creator>Alireza Heydari</dcterms:creator>
+        <dcterms:creator>Aylar Ziapour Sohi</dcterms:creator>
+        <dcterms:issued rdf:datatype="http://www.w3.org/2001/XMLSchema#date">2026-04-15</dcterms:issued>
+        <dcterms:modified rdf:datatype="http://www.w3.org/2001/XMLSchema#date">2026-04-15</dcterms:modified>
+        <dcterms:license rdf:resource="https://creativecommons.org/publicdomain/zero/1.0/"/>
+        <dcterms:publisher>Commentium Project</dcterms:publisher>
+        <dcterms:bibliographicCitation>A. Saie Arasi, A. Ziapour Sohi, A. Heydari, and A. Ziapour Sohi, “Commentium: A Core Ontology Enabling Explainable and Interpretable Comment Modeling.”</dcterms:bibliographicCitation>
+        <rdfs:isDefinedBy rdf:resource="https://w3id.org/commentium"/>
+        <rdfs:seeAlso rdf:resource="https://github.com/ArazSaieArasi3/Commentium"/>
+      </owl:Ontology>
+    </rdfs:isDefinedBy>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="https://w3id.org/commentium#motivatedBy">
+    <rdfs:label>motivatedBy</rdfs:label>
+    <rdfs:comment>Associates a comment with an intent that motivates it.</rdfs:comment>
+    <rdfs:domain rdf:resource="https://w3id.org/commentium#Comment"/>
+    <rdfs:range rdf:resource="https://w3id.org/commentium#Intent"/>
+    <rdfs:isDefinedBy rdf:resource="https://w3id.org/commentium"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="https://w3id.org/commentium#hasExpressionStyle">
+    <rdfs:label>hasExpressionStyle</rdfs:label>
+    <rdfs:comment>Associates a comment with its expression style.</rdfs:comment>
+    <rdfs:domain rdf:resource="https://w3id.org/commentium#Comment"/>
+    <rdfs:range rdf:resource="https://w3id.org/commentium#ExpressionStyle"/>
+    <rdfs:isDefinedBy rdf:resource="https://w3id.org/commentium"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="https://w3id.org/commentium#groundedIn">
+    <rdfs:label>groundedIn</rdfs:label>
+    <rdfs:comment>Interpreted meaning is grounded in an interpretive assumption.</rdfs:comment>
+    <rdfs:domain rdf:resource="https://w3id.org/commentium#InterpretedMeaning"/>
+    <rdfs:range rdf:resource="https://w3id.org/commentium#InterpretiveAssumption"/>
+    <rdfs:isDefinedBy rdf:resource="https://w3id.org/commentium"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="https://w3id.org/commentium#addresses">
+    <rdfs:label>addresses</rdfs:label>
+    <rdfs:comment>Associates a comment with its intended audience role.</rdfs:comment>
+    <rdfs:domain rdf:resource="https://w3id.org/commentium#Comment"/>
+    <rdfs:range rdf:resource="https://w3id.org/commentium#IntendedAudience"/>
+    <rdfs:isDefinedBy rdf:resource="https://w3id.org/commentium"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="https://w3id.org/commentium#memberOf">
+    <rdfs:label>memberOf</rdfs:label>
+    <rdfs:comment>Associates a comment with the thread of which it is a member.</rdfs:comment>
+    <rdfs:domain rdf:resource="https://w3id.org/commentium#Comment"/>
+    <rdfs:range rdf:resource="https://w3id.org/commentium#CommentThread"/>
+    <rdfs:isDefinedBy rdf:resource="https://w3id.org/commentium"/>
+  </owl:ObjectProperty>
+  <owl:DatatypeProperty rdf:about="https://w3id.org/commentium#typedAs">
+    <rdfs:label>typedAs</rdfs:label>
+    <rdfs:comment>Associates an asserted relation with its relation kind.</rdfs:comment>
+    <rdfs:domain rdf:resource="https://w3id.org/commentium#AssertedRelation"/>
+    <rdfs:range>
+      <rdfs:Datatype rdf:about="https://w3id.org/commentium#AssertedRelationKind">
+        <rdfs:label>AssertedRelationKind</rdfs:label>
+        <rdfs:comment>Datatype representing the controlled vocabulary of asserted relation kinds.</rdfs:comment>
+        <rdfs:isDefinedBy rdf:resource="https://w3id.org/commentium"/>
+        <commentium:hasStereotype>datatype</commentium:hasStereotype>
+        <commentium:allowedLiteral>praises</commentium:allowedLiteral>
+        <commentium:allowedLiteral>criticizes</commentium:allowedLiteral>
+        <commentium:allowedLiteral>supports</commentium:allowedLiteral>
+        <commentium:allowedLiteral>disagreesWith</commentium:allowedLiteral>
+        <commentium:allowedLiteral>questions</commentium:allowedLiteral>
+        <commentium:allowedLiteral>clarifies</commentium:allowedLiteral>
+        <commentium:allowedLiteral>cites</commentium:allowedLiteral>
+        <commentium:allowedLiteral>mentions</commentium:allowedLiteral>
+        <commentium:allowedLiteral>requests</commentium:allowedLiteral>
+        <commentium:allowedLiteral>reports</commentium:allowedLiteral>
+      </rdfs:Datatype>
+    </rdfs:range>
+    <rdfs:isDefinedBy rdf:resource="https://w3id.org/commentium"/>
+    <commentium:sourceField>derived from overall + reviewText</commentium:sourceField>
+    <commentium:operationalLayer>analytical</commentium:operationalLayer>
+    <commentium:mappingNote>Encodes an asserted relation kind using the controlled vocabulary.</commentium:mappingNote>
+  </owl:DatatypeProperty>
+  <commentium:Comment rdf:about="https://w3id.org/commentium#exampleComment">
+    <commentium:hasCommenter>
+      <commentium:Commenter rdf:about="https://w3id.org/commentium#exampleCommenter">
+        <commentium:playedBy rdf:resource="https://w3id.org/commentium#exampleAgent"/>
+        <rdfs:isDefinedBy rdf:resource="https://w3id.org/commentium"/>
+      </commentium:Commenter>
+    </commentium:hasCommenter>
+    <commentium:hasMessage>
+      <commentium:CommentMessage rdf:about="https://w3id.org/commentium#exampleMessage">
+        <rdfs:isDefinedBy rdf:resource="https://w3id.org/commentium"/>
+      </commentium:CommentMessage>
+    </commentium:hasMessage>
+    <commentium:via>
+      <commentium:Medium rdf:about="https://w3id.org/commentium#exampleMedium">
+        <rdfs:isDefinedBy rdf:resource="https://w3id.org/commentium"/>
+      </commentium:Medium>
+    </commentium:via>
+    <commentium:hasTime>
+      <commentium:Time rdf:about="https://w3id.org/commentium#exampleTime">
+        <rdfs:isDefinedBy rdf:resource="https://w3id.org/commentium"/>
+      </commentium:Time>
+    </commentium:hasTime>
+    <rdfs:isDefinedBy rdf:resource="https://w3id.org/commentium"/>
+  </commentium:Comment>
+  <owl:ObjectProperty rdf:about="https://w3id.org/commentium#refersTo">
+    <rdfs:label>refersTo</rdfs:label>
+    <rdfs:comment>Associates an asserted relation with the entity to which it refers.</rdfs:comment>
+    <rdfs:domain rdf:resource="https://w3id.org/commentium#AssertedRelation"/>
+    <rdfs:range rdf:resource="https://w3id.org/commentium#ReferencedEntity"/>
+    <rdfs:isDefinedBy rdf:resource="https://w3id.org/commentium"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="https://w3id.org/commentium#involvesReference">
+    <rdfs:label>involvesReference</rdfs:label>
+    <rdfs:comment>Associates an asserted relation with a referenced entity.</rdfs:comment>
+    <rdfs:domain rdf:resource="https://w3id.org/commentium#AssertedRelation"/>
+    <rdfs:range rdf:resource="https://w3id.org/commentium#ReferencedEntity"/>
+    <rdfs:isDefinedBy rdf:resource="https://w3id.org/commentium"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="https://w3id.org/commentium#governedBy">
+    <rdfs:label>governedBy</rdfs:label>
+    <rdfs:comment>Associates a situation with the governing interaction norm.</rdfs:comment>
+    <rdfs:domain rdf:resource="https://w3id.org/commentium#Situation"/>
+    <rdfs:range rdf:resource="https://w3id.org/commentium#InteractionNorm"/>
+    <rdfs:isDefinedBy rdf:resource="https://w3id.org/commentium"/>
+  </owl:ObjectProperty>
+  <owl:AnnotationProperty rdf:about="https://w3id.org/commentium#allowedLiteral">
+    <rdfs:label>allowedLiteral</rdfs:label>
+    <rdfs:comment>Enumerates a controlled literal admissible for a datatype-based vocabulary.</rdfs:comment>
+    <rdfs:isDefinedBy rdf:resource="https://w3id.org/commentium"/>
+  </owl:AnnotationProperty>
+  <owl:ObjectProperty rdf:about="https://w3id.org/commentium#mediatedBy">
+    <rdfs:label>mediatedBy</rdfs:label>
+    <rdfs:comment>Associates stance with the interpretation through which it is mediated.</rdfs:comment>
+    <rdfs:domain rdf:resource="https://w3id.org/commentium#Stance"/>
+    <rdfs:range rdf:resource="https://w3id.org/commentium#Interpretation"/>
+    <rdfs:isDefinedBy rdf:resource="https://w3id.org/commentium"/>
+  </owl:ObjectProperty>
+  <owl:AnnotationProperty rdf:about="https://w3id.org/commentium#operationalLayer">
+    <rdfs:label>operationalLayer</rdfs:label>
+    <rdfs:comment>Indicates whether a construct is observed, contextual, or analytical in operational use.</rdfs:comment>
+    <rdfs:isDefinedBy rdf:resource="https://w3id.org/commentium"/>
+  </owl:AnnotationProperty>
+  <owl:DatatypeProperty rdf:about="https://w3id.org/commentium#exampleLabel">
+    <rdfs:label>exampleLabel</rdfs:label>
+    <rdfs:comment>Auxiliary example label.</rdfs:comment>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:isDefinedBy rdf:resource="https://w3id.org/commentium"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:about="https://w3id.org/commentium#constraintText">
+    <rdfs:label>constraintText</rdfs:label>
+    <rdfs:comment>Textual rendering of a design constraint or guideline.</rdfs:comment>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:isDefinedBy rdf:resource="https://w3id.org/commentium"/>
+  </owl:DatatypeProperty>
+  <owl:AnnotationProperty rdf:about="https://w3id.org/commentium#mappingNote">
+    <rdfs:label>mappingNote</rdfs:label>
+    <rdfs:comment>Provides a short note about alignment or operational interpretation.</rdfs:comment>
+    <rdfs:isDefinedBy rdf:resource="https://w3id.org/commentium"/>
+  </owl:AnnotationProperty>
+  <owl:AnnotationProperty rdf:about="https://w3id.org/commentium#hasStereotype">
+    <rdfs:label>hasStereotype</rdfs:label>
+    <rdfs:comment>Stores the OntoUML stereotype associated with a modeling element.</rdfs:comment>
+    <rdfs:isDefinedBy rdf:resource="https://w3id.org/commentium"/>
+  </owl:AnnotationProperty>
+  <owl:ObjectProperty rdf:about="https://w3id.org/commentium#reflects">
+    <rdfs:label>reflects</rdfs:label>
+    <rdfs:comment>Associates a comment with a stance it reflects.</rdfs:comment>
+    <rdfs:domain rdf:resource="https://w3id.org/commentium#Comment"/>
+    <rdfs:range rdf:resource="https://w3id.org/commentium#Stance"/>
+    <rdfs:isDefinedBy rdf:resource="https://w3id.org/commentium"/>
+  </owl:ObjectProperty>
+  <owl:AnnotationProperty rdf:about="https://w3id.org/commentium#sourceField">
+    <rdfs:label>sourceField</rdfs:label>
+    <rdfs:comment>Indicates a representative source field used in dataset alignment.</rdfs:comment>
+    <rdfs:isDefinedBy rdf:resource="https://w3id.org/commentium"/>
+  </owl:AnnotationProperty>
+  <owl:Class rdf:about="https://w3id.org/commentium#CommentThread">
+    <rdfs:label>CommentThread</rdfs:label>
+    <rdfs:comment>Collective aggregation of related comments.</rdfs:comment>
+    <commentium:hasStereotype>collective</commentium:hasStereotype>
+    <rdfs:subClassOf rdf:resource="https://w3id.org/commentium#Commentable"/>
+    <rdfs:isDefinedBy rdf:resource="https://w3id.org/commentium"/>
+  </owl:Class>
+  <owl:ObjectProperty rdf:about="https://w3id.org/commentium#hasMessage">
+    <rdfs:label>hasMessage</rdfs:label>
+    <rdfs:comment>Associates a comment event with its informational carrier.</rdfs:comment>
+    <rdfs:domain rdf:resource="https://w3id.org/commentium#Comment"/>
+    <rdfs:range rdf:resource="https://w3id.org/commentium#CommentMessage"/>
+    <owl:inverseOf>
+      <owl:ObjectProperty rdf:about="https://w3id.org/commentium#messageOf">
+        <rdfs:label>messageOf</rdfs:label>
+        <rdfs:comment>Inverse of hasMessage.</rdfs:comment>
+        <rdfs:domain rdf:resource="https://w3id.org/commentium#CommentMessage"/>
+        <rdfs:range rdf:resource="https://w3id.org/commentium#Comment"/>
+        <rdfs:isDefinedBy rdf:resource="https://w3id.org/commentium"/>
+      </owl:ObjectProperty>
+    </owl:inverseOf>
+    <rdfs:isDefinedBy rdf:resource="https://w3id.org/commentium"/>
+  </owl:ObjectProperty>
+  <owl:Class rdf:about="https://w3id.org/commentium#Comment">
+    <rdfs:label>Comment</rdfs:label>
+    <rdfs:comment>Communicative event representing a context-embedded comment.</rdfs:comment>
+    <commentium:hasStereotype>event</commentium:hasStereotype>
+    <rdfs:subClassOf>
+      <owl:Restriction rdf:nodeID="Nde74d3f582954e1ba6037ad391a1636a">
+        <owl:onProperty rdf:resource="https://w3id.org/commentium#hasMessage"/>
+        <owl:someValuesFrom rdf:resource="https://w3id.org/commentium#CommentMessage"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction rdf:nodeID="N01434f122abb44508bf79d55cd7eafd9">
+        <owl:onProperty rdf:resource="https://w3id.org/commentium#occursIn"/>
+        <owl:someValuesFrom rdf:resource="https://w3id.org/commentium#Situation"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction rdf:nodeID="N658ccbd343464fcb87b9a47e34b9770d">
+        <owl:onProperty rdf:resource="https://w3id.org/commentium#via"/>
+        <owl:someValuesFrom rdf:resource="https://w3id.org/commentium#Medium"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction rdf:nodeID="Ne6eb59eac06446f29b6542c679752cef">
+        <owl:onProperty rdf:resource="https://w3id.org/commentium#hasTime"/>
+        <owl:someValuesFrom rdf:resource="https://w3id.org/commentium#Time"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction rdf:nodeID="N2b7e587cbfd64aafb0faf3cc6d3823c9">
+        <owl:onProperty rdf:resource="https://w3id.org/commentium#hasCommenter"/>
+        <owl:someValuesFrom rdf:resource="https://w3id.org/commentium#Commenter"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <owl:disjointWith rdf:resource="https://w3id.org/commentium#CommentMessage"/>
+    <owl:disjointWith rdf:resource="https://w3id.org/commentium#Agent"/>
+    <rdfs:isDefinedBy rdf:resource="https://w3id.org/commentium"/>
+    <commentium:operationalLayer>observed</commentium:operationalLayer>
+    <commentium:mappingNote>Trace of a communicative event represented by a review/comment instance.</commentium:mappingNote>
+  </owl:Class>
+  <owl:ObjectProperty rdf:about="https://w3id.org/commentium#respondsTo">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#AsymmetricProperty"/>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#IrreflexiveProperty"/>
+    <rdfs:label>respondsTo</rdfs:label>
+    <rdfs:comment>Associates a response with the comment to which it replies.</rdfs:comment>
+    <rdfs:domain rdf:resource="https://w3id.org/commentium#Response"/>
+    <rdfs:range rdf:resource="https://w3id.org/commentium#Comment"/>
+    <rdfs:isDefinedBy rdf:resource="https://w3id.org/commentium"/>
+  </owl:ObjectProperty>
+  <owl:Class rdf:about="https://w3id.org/commentium#IntendedAudience">
+    <rdfs:label>IntendedAudience</rdfs:label>
+    <rdfs:comment>Role played by an Agent addressed by a Comment.</rdfs:comment>
+    <commentium:hasStereotype>role</commentium:hasStereotype>
+    <rdfs:subClassOf>
+      <owl:Restriction rdf:nodeID="Ne4b33c6dd10342d692037ee4af4b4ca7">
+        <owl:onProperty rdf:resource="https://w3id.org/commentium#playedBy"/>
+        <owl:allValuesFrom rdf:resource="https://w3id.org/commentium#Agent"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:isDefinedBy rdf:resource="https://w3id.org/commentium"/>
+  </owl:Class>
+  <owl:Class rdf:about="https://w3id.org/commentium#Commenter">
+    <rdfs:label>Commenter</rdfs:label>
+    <rdfs:comment>Role played by an Agent that authors a Comment.</rdfs:comment>
+    <commentium:hasStereotype>role</commentium:hasStereotype>
+    <rdfs:subClassOf>
+      <owl:Restriction rdf:nodeID="Nd439bff86814460481a85c751a49d8a1">
+        <owl:onProperty rdf:resource="https://w3id.org/commentium#playedBy"/>
+        <owl:allValuesFrom rdf:resource="https://w3id.org/commentium#Agent"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:isDefinedBy rdf:resource="https://w3id.org/commentium"/>
+  </owl:Class>
+  <owl:Class rdf:about="https://w3id.org/commentium#ExpressionStyle">
+    <rdfs:label>ExpressionStyle</rdfs:label>
+    <rdfs:comment>Quality characterizing how a comment is expressed.</rdfs:comment>
+    <commentium:hasStereotype>quality</commentium:hasStereotype>
+    <rdfs:isDefinedBy rdf:resource="https://w3id.org/commentium"/>
+    <commentium:operationalLayer>analytical</commentium:operationalLayer>
+    <commentium:mappingNote>Style characteristic derived from linguistic analysis.</commentium:mappingNote>
+  </owl:Class>
+  <owl:ObjectProperty rdf:about="https://w3id.org/commentium#inheresIn">
+    <rdfs:label>inheresIn</rdfs:label>
+    <rdfs:comment>Associates a mode with the agent in which it inheres.</rdfs:comment>
+    <rdfs:range rdf:resource="https://w3id.org/commentium#Agent"/>
+    <rdfs:isDefinedBy rdf:resource="https://w3id.org/commentium"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="https://w3id.org/commentium#assertedIn">
+    <rdfs:label>assertedIn</rdfs:label>
+    <rdfs:comment>Associates an asserted relation with the comment in which it is asserted.</rdfs:comment>
+    <rdfs:domain rdf:resource="https://w3id.org/commentium#AssertedRelation"/>
+    <rdfs:range rdf:resource="https://w3id.org/commentium#Comment"/>
+    <rdfs:isDefinedBy rdf:resource="https://w3id.org/commentium"/>
+  </owl:ObjectProperty>
+  <owl:Class rdf:about="https://w3id.org/commentium#Stance">
+    <rdfs:label>Stance</rdfs:label>
+    <rdfs:comment>Mode inhering in an Agent that captures evaluative orientation.</rdfs:comment>
+    <commentium:hasStereotype>mode</commentium:hasStereotype>
+    <rdfs:subClassOf>
+      <owl:Restriction rdf:nodeID="N0f8357edddf84f11bcd67fbe466fc5f2">
+        <owl:onProperty rdf:resource="https://w3id.org/commentium#inheresIn"/>
+        <owl:allValuesFrom rdf:resource="https://w3id.org/commentium#Agent"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:isDefinedBy rdf:resource="https://w3id.org/commentium"/>
+    <commentium:operationalLayer>analytical</commentium:operationalLayer>
+    <commentium:mappingNote>Evaluative orientation inferred from review signals and text.</commentium:mappingNote>
+  </owl:Class>
+  <owl:ObjectProperty rdf:about="https://w3id.org/commentium#occursIn">
+    <rdfs:label>occursIn</rdfs:label>
+    <rdfs:comment>Associates a comment with the situation in which it occurs.</rdfs:comment>
+    <rdfs:domain rdf:resource="https://w3id.org/commentium#Comment"/>
+    <rdfs:range rdf:resource="https://w3id.org/commentium#Situation"/>
+    <rdfs:isDefinedBy rdf:resource="https://w3id.org/commentium"/>
+  </owl:ObjectProperty>
+  <owl:Class rdf:about="https://w3id.org/commentium#Medium">
+    <rdfs:label>Medium</rdfs:label>
+    <rdfs:comment>Medium through which a comment is communicated.</rdfs:comment>
+    <commentium:hasStereotype>kind</commentium:hasStereotype>
+    <rdfs:isDefinedBy rdf:resource="https://w3id.org/commentium"/>
+    <commentium:operationalLayer>contextual</commentium:operationalLayer>
+    <commentium:mappingNote>Communication platform or medium through which the comment is conveyed.</commentium:mappingNote>
+  </owl:Class>
+  <owl:Class rdf:about="https://w3id.org/commentium#InterpretiveAssumption">
+    <rdfs:label>InterpretiveAssumption</rdfs:label>
+    <rdfs:comment>Information object representing assumptions grounding interpretation.</rdfs:comment>
+    <commentium:hasStereotype>information object</commentium:hasStereotype>
+    <rdfs:isDefinedBy rdf:resource="https://w3id.org/commentium"/>
+    <commentium:operationalLayer>analytical</commentium:operationalLayer>
+    <commentium:mappingNote>Assumptive basis used to ground interpretation.</commentium:mappingNote>
+  </owl:Class>
+  <owl:Class rdf:about="https://w3id.org/commentium#Interpretation">
+    <rdfs:label>Interpretation</rdfs:label>
+    <rdfs:comment>Relator connecting an agent and a comment message to an interpreted meaning.</rdfs:comment>
+    <commentium:hasStereotype>relator</commentium:hasStereotype>
+    <rdfs:subClassOf>
+      <owl:Restriction rdf:nodeID="N1eb062aa871d4d0ba311bd83aeead735">
+        <owl:onProperty rdf:resource="https://w3id.org/commentium#produces"/>
+        <owl:onClass rdf:resource="https://w3id.org/commentium#InterpretedMeaning"/>
+        <owl:minQualifiedCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#nonNegativeInteger">1</owl:minQualifiedCardinality>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction rdf:nodeID="N6bf1b17de747478789d45444344e7496">
+        <owl:onProperty rdf:resource="https://w3id.org/commentium#mediatesAgent"/>
+        <owl:someValuesFrom rdf:resource="https://w3id.org/commentium#Agent"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction rdf:nodeID="N104a5be4f9244a56be71c7488f7045d3">
+        <owl:onProperty rdf:resource="https://w3id.org/commentium#interpretsMessage"/>
+        <owl:someValuesFrom rdf:resource="https://w3id.org/commentium#CommentMessage"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction rdf:nodeID="Nc768c009cb1a452ca5c7755df2f24faf">
+        <owl:onProperty rdf:resource="https://w3id.org/commentium#basedOn"/>
+        <owl:someValuesFrom rdf:resource="https://w3id.org/commentium#InterpretiveAssumption"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction rdf:nodeID="Nd81e5d3a628f4a1f8cf42db4bd994ad5">
+        <owl:onProperty rdf:resource="https://w3id.org/commentium#produces"/>
+        <owl:someValuesFrom rdf:resource="https://w3id.org/commentium#InterpretedMeaning"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <owl:disjointWith rdf:resource="https://w3id.org/commentium#InterpretedMeaning"/>
+    <rdfs:isDefinedBy rdf:resource="https://w3id.org/commentium"/>
+    <commentium:operationalLayer>analytical</commentium:operationalLayer>
+    <commentium:mappingNote>Interpretive relator connecting agents, messages, and inferred meaning.</commentium:mappingNote>
+  </owl:Class>
+  <owl:ObjectProperty rdf:about="https://w3id.org/commentium#interpretsMessage">
+    <rdfs:label>interpretsMessage</rdfs:label>
+    <rdfs:comment>Interpretation is based on a comment message.</rdfs:comment>
+    <rdfs:domain rdf:resource="https://w3id.org/commentium#Interpretation"/>
+    <rdfs:range rdf:resource="https://w3id.org/commentium#CommentMessage"/>
+    <rdfs:isDefinedBy rdf:resource="https://w3id.org/commentium"/>
+  </owl:ObjectProperty>
+  <owl:Class rdf:about="https://w3id.org/commentium#Intent">
+    <rdfs:label>Intent</rdfs:label>
+    <rdfs:comment>Mode inhering in an Agent that captures motivational orientation.</rdfs:comment>
+    <commentium:hasStereotype>mode</commentium:hasStereotype>
+    <rdfs:subClassOf>
+      <owl:Restriction rdf:nodeID="N9d90c0d42b1b419585412dcf837bdc04">
+        <owl:onProperty rdf:resource="https://w3id.org/commentium#inheresIn"/>
+        <owl:allValuesFrom rdf:resource="https://w3id.org/commentium#Agent"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <owl:disjointWith rdf:resource="https://w3id.org/commentium#ExpressionStyle"/>
+    <rdfs:isDefinedBy rdf:resource="https://w3id.org/commentium"/>
+    <commentium:operationalLayer>analytical</commentium:operationalLayer>
+    <commentium:mappingNote>Motivational orientation reconstructed through analytical interpretation.</commentium:mappingNote>
+  </owl:Class>
+  <owl:Class rdf:about="https://w3id.org/commentium#CommentMessage">
+    <rdfs:label>CommentMessage</rdfs:label>
+    <rdfs:comment>Information object serving as the informational carrier of a comment.</rdfs:comment>
+    <commentium:hasStereotype>information object</commentium:hasStereotype>
+    <rdfs:isDefinedBy rdf:resource="https://w3id.org/commentium"/>
+    <commentium:operationalLayer>observed</commentium:operationalLayer>
+    <commentium:mappingNote>Informational artifact carrying the textual content of a comment.</commentium:mappingNote>
+  </owl:Class>
+  <owl:Class rdf:about="https://w3id.org/commentium#ReferencedEntity">
+    <rdfs:label>ReferencedEntity</rdfs:label>
+    <rdfs:comment>Role played by an entity explicitly referenced in a comment or asserted relation.</rdfs:comment>
+    <commentium:hasStereotype>role</commentium:hasStereotype>
+    <rdfs:subClassOf>
+      <owl:Restriction rdf:nodeID="Nb8ec7b202b79433dae7c891a951c3a46">
+        <owl:onProperty rdf:resource="https://w3id.org/commentium#playedBy"/>
+        <owl:allValuesFrom rdf:resource="https://w3id.org/commentium#Agent"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:isDefinedBy rdf:resource="https://w3id.org/commentium"/>
+    <commentium:operationalLayer>analytical</commentium:operationalLayer>
+    <commentium:mappingNote>Entity recovered through reference extraction or annotation.</commentium:mappingNote>
+  </owl:Class>
+  <owl:Class rdf:about="https://w3id.org/commentium#Response">
+    <rdfs:label>Response</rdfs:label>
+    <rdfs:comment>Comment that responds to another comment.</rdfs:comment>
+    <commentium:hasStereotype>subkind</commentium:hasStereotype>
+    <rdfs:subClassOf rdf:resource="https://w3id.org/commentium#Comment"/>
+    <rdfs:subClassOf>
+      <owl:Restriction rdf:nodeID="N75c47ee174094a2fa71b16a675380173">
+        <owl:onProperty rdf:resource="https://w3id.org/commentium#respondsTo"/>
+        <owl:someValuesFrom rdf:resource="https://w3id.org/commentium#Comment"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:isDefinedBy rdf:resource="https://w3id.org/commentium"/>
+  </owl:Class>
+  <owl:Class rdf:about="https://w3id.org/commentium#AssertedRelation">
+    <rdfs:label>AssertedRelation</rdfs:label>
+    <rdfs:comment>Relator encoding an explicit semantic relation asserted in a comment.</rdfs:comment>
+    <commentium:hasStereotype>relator</commentium:hasStereotype>
+    <rdfs:subClassOf>
+      <owl:Restriction rdf:nodeID="N8cc56e0de2da4ff88ae822ac6bd9cc72">
+        <owl:onProperty rdf:resource="https://w3id.org/commentium#assertedIn"/>
+        <owl:someValuesFrom rdf:resource="https://w3id.org/commentium#Comment"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction rdf:nodeID="N3bf6b043551a491c80c243cff3e1860d">
+        <owl:onProperty rdf:resource="https://w3id.org/commentium#involvesSubject"/>
+        <owl:onClass rdf:resource="https://w3id.org/commentium#CommentSubject"/>
+        <owl:minQualifiedCardinality rdf:datatype="http://www.w3.org/2001/XMLSchema#nonNegativeInteger">1</owl:minQualifiedCardinality>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:isDefinedBy rdf:resource="https://w3id.org/commentium"/>
+    <commentium:operationalLayer>analytical</commentium:operationalLayer>
+    <commentium:mappingNote>Structured semantic relation asserted within a comment.</commentium:mappingNote>
+  </owl:Class>
+  <owl:Class rdf:about="https://w3id.org/commentium#Commentable">
+    <rdfs:label>Commentable</rdfs:label>
+    <rdfs:comment>Entity that can receive comments.</rdfs:comment>
+    <commentium:hasStereotype>mixin</commentium:hasStereotype>
+    <rdfs:isDefinedBy rdf:resource="https://w3id.org/commentium"/>
+  </owl:Class>
+  <owl:Class rdf:about="https://w3id.org/commentium#CommentSubject">
+    <rdfs:label>CommentSubject</rdfs:label>
+    <rdfs:comment>Role played by an entity that is the target of a comment or asserted relation.</rdfs:comment>
+    <commentium:hasStereotype>role</commentium:hasStereotype>
+    <rdfs:subClassOf>
+      <owl:Restriction rdf:nodeID="N03262751ab674fa9a94a4c3ab2c2e1cb">
+        <owl:onProperty rdf:resource="https://w3id.org/commentium#playedBy"/>
+        <owl:allValuesFrom rdf:resource="https://w3id.org/commentium#Agent"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:isDefinedBy rdf:resource="https://w3id.org/commentium"/>
+    <commentium:operationalLayer>observed</commentium:operationalLayer>
+    <commentium:mappingNote>Target entity about which the comment is directed.</commentium:mappingNote>
+  </owl:Class>
+  <owl:Class rdf:about="https://w3id.org/commentium#InteractionNorm">
+    <rdfs:label>InteractionNorm</rdfs:label>
+    <rdfs:comment>Social object representing norms governing a comment situation.</rdfs:comment>
+    <commentium:hasStereotype>social object</commentium:hasStereotype>
+    <rdfs:isDefinedBy rdf:resource="https://w3id.org/commentium"/>
+    <commentium:operationalLayer>contextual</commentium:operationalLayer>
+    <commentium:mappingNote>Normative structure governing interaction in a given situation.</commentium:mappingNote>
+  </owl:Class>
+  <owl:ObjectProperty rdf:about="https://w3id.org/commentium#playedBy">
+    <rdfs:label>playedBy</rdfs:label>
+    <rdfs:comment>Associates a role instance with the agent that plays it.</rdfs:comment>
+    <rdfs:range rdf:resource="https://w3id.org/commentium#Agent"/>
+    <rdfs:isDefinedBy rdf:resource="https://w3id.org/commentium"/>
+  </owl:ObjectProperty>
+  <owl:Class rdf:about="https://w3id.org/commentium#Situation">
+    <rdfs:label>Situation</rdfs:label>
+    <rdfs:comment>Situation in which a comment occurs.</rdfs:comment>
+    <commentium:hasStereotype>situation</commentium:hasStereotype>
+    <rdfs:isDefinedBy rdf:resource="https://w3id.org/commentium"/>
+    <commentium:operationalLayer>contextual</commentium:operationalLayer>
+    <commentium:mappingNote>Interaction context in which the comment occurs.</commentium:mappingNote>
+  </owl:Class>
+  <owl:ObjectProperty rdf:about="https://w3id.org/commentium#produces">
+    <rdfs:label>produces</rdfs:label>
+    <rdfs:comment>Interpretation produces interpreted meaning.</rdfs:comment>
+    <rdfs:domain rdf:resource="https://w3id.org/commentium#Interpretation"/>
+    <rdfs:range rdf:resource="https://w3id.org/commentium#InterpretedMeaning"/>
+    <rdfs:isDefinedBy rdf:resource="https://w3id.org/commentium"/>
+  </owl:ObjectProperty>
+  <owl:Class rdf:about="https://w3id.org/commentium#Time">
+    <rdfs:label>Time</rdfs:label>
+    <rdfs:comment>Quality temporally characterizing a comment.</rdfs:comment>
+    <commentium:hasStereotype>quality</commentium:hasStereotype>
+    <owl:disjointWith rdf:resource="https://w3id.org/commentium#ExpressionStyle"/>
+    <rdfs:isDefinedBy rdf:resource="https://w3id.org/commentium"/>
+    <commentium:operationalLayer>observed</commentium:operationalLayer>
+    <commentium:mappingNote>Temporal qualifier associated with the comment event.</commentium:mappingNote>
+  </owl:Class>
+  <owl:ObjectProperty rdf:about="https://w3id.org/commentium#hasTime">
+    <rdfs:label>hasTime</rdfs:label>
+    <rdfs:comment>Associates a comment with its temporal quality.</rdfs:comment>
+    <rdfs:domain rdf:resource="https://w3id.org/commentium#Comment"/>
+    <rdfs:range rdf:resource="https://w3id.org/commentium#Time"/>
+    <rdfs:isDefinedBy rdf:resource="https://w3id.org/commentium"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="https://w3id.org/commentium#hasCommenter">
+    <rdfs:label>hasCommenter</rdfs:label>
+    <rdfs:comment>Associates a comment with its commenter role.</rdfs:comment>
+    <rdfs:domain rdf:resource="https://w3id.org/commentium#Comment"/>
+    <rdfs:range rdf:resource="https://w3id.org/commentium#Commenter"/>
+    <rdfs:isDefinedBy rdf:resource="https://w3id.org/commentium"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="https://w3id.org/commentium#involvesSubject">
+    <rdfs:label>involvesSubject</rdfs:label>
+    <rdfs:comment>Associates an asserted relation with at least one comment subject.</rdfs:comment>
+    <rdfs:domain rdf:resource="https://w3id.org/commentium#AssertedRelation"/>
+    <rdfs:range rdf:resource="https://w3id.org/commentium#CommentSubject"/>
+    <rdfs:isDefinedBy rdf:resource="https://w3id.org/commentium"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="https://w3id.org/commentium#via">
+    <rdfs:label>via</rdfs:label>
+    <rdfs:comment>Associates a comment with the medium through which it is communicated.</rdfs:comment>
+    <rdfs:domain rdf:resource="https://w3id.org/commentium#Comment"/>
+    <rdfs:range rdf:resource="https://w3id.org/commentium#Medium"/>
+    <rdfs:isDefinedBy rdf:resource="https://w3id.org/commentium"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="https://w3id.org/commentium#basedOn">
+    <rdfs:label>basedOn</rdfs:label>
+    <rdfs:comment>Interpretation is based on an interpretive assumption.</rdfs:comment>
+    <rdfs:domain rdf:resource="https://w3id.org/commentium#Interpretation"/>
+    <rdfs:range rdf:resource="https://w3id.org/commentium#InterpretiveAssumption"/>
+    <rdfs:isDefinedBy rdf:resource="https://w3id.org/commentium"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="https://w3id.org/commentium#mediatesAgent">
+    <rdfs:label>mediatesAgent</rdfs:label>
+    <rdfs:comment>Interpretation mediates an agent.</rdfs:comment>
+    <rdfs:domain rdf:resource="https://w3id.org/commentium#Interpretation"/>
+    <rdfs:range rdf:resource="https://w3id.org/commentium#Agent"/>
+    <rdfs:isDefinedBy rdf:resource="https://w3id.org/commentium"/>
+  </owl:ObjectProperty>
+  <owl:Class rdf:about="https://w3id.org/commentium#InterpretedMeaning">
+    <rdfs:label>InterpretedMeaning</rdfs:label>
+    <rdfs:comment>Information object representing meaning produced through interpretation.</rdfs:comment>
+    <commentium:hasStereotype>information object</commentium:hasStereotype>
+    <rdfs:isDefinedBy rdf:resource="https://w3id.org/commentium"/>
+    <commentium:operationalLayer>analytical</commentium:operationalLayer>
+    <commentium:mappingNote>Meaning produced through interpretation rather than stored directly in the source schema.</commentium:mappingNote>
+  </owl:Class>
+  <commentium:Agent rdf:about="https://w3id.org/commentium#exampleAgent">
+    <rdfs:isDefinedBy rdf:resource="https://w3id.org/commentium"/>
+  </commentium:Agent>
+  <owl:Class rdf:about="https://w3id.org/commentium#Agent">
+    <rdfs:label>Agent</rdfs:label>
+    <rdfs:comment>Identity-bearing participant in communicative interaction.</rdfs:comment>
+    <commentium:hasStereotype>kind</commentium:hasStereotype>
+    <rdfs:isDefinedBy rdf:resource="https://w3id.org/commentium"/>
+    <commentium:operationalLayer>observed</commentium:operationalLayer>
+    <commentium:mappingNote>Identity-bearing participant corresponding to a reviewer or actor.</commentium:mappingNote>
+  </owl:Class>
+</rdf:RDF>

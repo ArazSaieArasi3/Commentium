@@ -35,17 +35,17 @@ if (!validate(project)) {
   summary.schemaValidation = 'PASS';
 }
 
-// 2) ontouml-js uses the same official exchange schema and provides parser checks.
-const libValidation = serializationUtils.validate(raw);
-if (libValidation !== true) {
-  summary.ontoumlJsValidation = 'FAIL';
-  summary.ontoumlJsErrors = libValidation;
-  failed = true;
-} else {
+// 2) ontouml-js validates by throwing on failure and returning void on success.
+try {
+  serializationUtils.validate(raw);
   summary.ontoumlJsValidation = 'PASS';
+} catch (error) {
+  summary.ontoumlJsValidation = 'FAIL';
+  summary.ontoumlJsErrors = String(error?.stack || error);
+  failed = true;
 }
 try {
-  serializationUtils.parse(raw, true);
+  serializationUtils.parse(raw);
   summary.roundTrip = 'PASS';
 } catch (error) {
   summary.roundTrip = 'FAIL';

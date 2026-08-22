@@ -1,24 +1,25 @@
 {
-  "evidenceVersion": "0.1",
+  "evidenceVersion": "0.2",
   "privacyPolicy": "Raw third-party text and account identifiers are not committed or uploaded. The acquisition job records checksums and emits structurally normalized, pseudonymized records only inside the ephemeral CI workspace.",
   "datasets": {
     "amazon-reviews-2023": {
       "source": "McAuley-Lab/Amazon-Reviews-2023",
       "config": "raw_review_All_Beauty",
       "split": "full",
-      "acquisition": "Hugging Face datasets-server first-rows API",
+      "acquisition": "stream first records from current official Hugging Face/Xet raw/review_categories/All_Beauty.jsonl",
       "targetRecords": 25
     },
     "reddit-convokit": {
       "source": "subreddit-Cornell",
-      "acquisition": "ConvoKit download()",
+      "acquisition": "direct download using current ConvoKit corpus URL resolution",
       "maxConversations": 3,
       "maxCommentsPerConversation": 12,
       "requireNestedReply": true
     },
     "wikiconv": {
-      "source": "wikiconv-russian-2004",
-      "acquisition": "ConvoKit download()",
+      "source": "wikiconv-russian-2005",
+      "acquisition": "direct download using current ConvoKit WikiConv URL resolution",
+      "samplingRationale": "russian-2004 was accessible but contained no resolvable nested reply under the bounded reply-focused selector; russian-2005 is the next documented yearly corpus and is used to exercise reply semantics without changing dataset family",
       "maxConversations": 3,
       "maxCommentsPerConversation": 12,
       "requireNestedReply": true

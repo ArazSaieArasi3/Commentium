@@ -8,6 +8,7 @@ on:
     paths:
       - 'mappings/design/real-sample-manifest.json'
       - 'scripts/acquire_real_design_samples.py'
+      - 'scripts/acquire_real_design_samples_http.py'
       - 'scripts/map_real_design_samples.py'
       - 'scripts/test_real_mapping_portability.py'
       - 'scripts/map_design_datasets.py'
@@ -20,6 +21,7 @@ on:
     paths:
       - 'mappings/design/real-sample-manifest.json'
       - 'scripts/acquire_real_design_samples.py'
+      - 'scripts/acquire_real_design_samples_http.py'
       - 'scripts/map_real_design_samples.py'
       - 'scripts/test_real_mapping_portability.py'
       - 'scripts/map_design_datasets.py'
@@ -49,7 +51,7 @@ jobs:
           requests==2.32.5 pyshacl==0.40.1
 
       - name: Acquire bounded real samples without persisting raw text
-        run: python scripts/acquire_real_design_samples.py
+        run: python scripts/acquire_real_design_samples_http.py
 
       - name: Map pseudonymized real structural samples
         run: python scripts/map_real_design_samples.py

@@ -1,0 +1,3 @@
+{"synthetic":true,"id":"wk-h1","speaker":"editor","conversation_id":"wk-h1","reply_to":null,"timestamp":1609459200,"text":"Synthetic section heading","type":"CREATION","meta":{"is_section_header":true,"indentation":0,"rev_id":100}}
+{"synthetic":true,"id":"wk-c1","speaker":"alice","conversation_id":"wk-h1","reply_to":"wk-h1","timestamp":1609459260,"text":"Synthetic WikiConv talk-page comment.","type":"ADDITION","meta":{"is_section_header":false,"indentation":1,"rev_id":101,"toxicity":0.01}}
+{"synthetic":true,"id":"wk-c2","speaker":"bob","conversation_id":"wk-h1","reply_to":"wk-c1","timestamp":1609459320,"text":"Synthetic WikiConv nested reply.","type":"ADDITION","meta":{"is_section_header":false,"indentation":2,"rev_id":102,"toxicity":0.02}}

@@ -1,0 +1,29 @@
+{
+  "id": "wikiconv",
+  "adapter": "wikiconv",
+  "role": "design",
+  "sourceDocumentation": [
+    "https://convokit.cornell.edu/documentation/wikiconv.html",
+    "https://convokit.cornell.edu/documentation/data_format.html"
+  ],
+  "schemaEvidenceDate": "2026-08-22",
+  "inputFixture": "mappings/design/examples/wikiconv.synthetic.jsonl",
+  "output": "validation-results/mappings/wikiconv.ttl",
+  "documentedFields": ["id", "speaker", "conversation_id", "reply_to", "timestamp", "text", "type", "meta.is_section_header", "meta.indentation", "meta.ancestor_id", "meta.rev_id", "meta.parent_id", "meta.toxicity", "meta.original", "meta.modification", "meta.deletion", "meta.restoration"],
+  "coreMappings": {
+    "talk-page comment action": "cm:Comment; cm:Response only when reply_to targets a mapped prior Comment",
+    "text": "cm:CommentMessage",
+    "speaker": "cm:Agent + cm:Commenter",
+    "conversation host": "local persistent structural host classified cm:Commentable",
+    "reply_to comment": "cm:respondsTo prior cm:Comment",
+    "conversation grouping": "cm:CommentThread via cm:partOfThread",
+    "timestamp": "cm:hasTime xsd:dateTime",
+    "dataset/service": "cm:Medium via cm:via"
+  },
+  "profileOnlyFields": ["type", "indentation", "ancestor_id", "rev_id", "parent_id", "toxicity", "original", "modification", "deletion", "restoration"],
+  "policies": [
+    "Section-header utterances are not mapped as Comment events in the executable fixture.",
+    "Modification/deletion/restoration remain lifecycle/provenance profile data and do not inflate the Core.",
+    "No semantic subject or intended audience is inferred from Talk Page structure alone."
+  ]
+}

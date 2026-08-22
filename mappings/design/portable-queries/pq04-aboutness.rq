@@ -1,0 +1,4 @@
+PREFIX cm: <https://w3id.org/commentium#>
+SELECT ?comment ?subject
+WHERE { ?comment cm:isAbout ?subject . }
+ORDER BY ?comment

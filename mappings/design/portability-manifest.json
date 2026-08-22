@@ -1,0 +1,23 @@
+{
+  "queries": [
+    {"id":"PQ01","path":"mappings/design/portable-queries/pq01-core-context.rq","form":"select"},
+    {"id":"PQ02","path":"mappings/design/portable-queries/pq02-reply-separation.rq","form":"select"},
+    {"id":"PQ03","path":"mappings/design/portable-queries/pq03-thread-membership.rq","form":"select"},
+    {"id":"PQ04","path":"mappings/design/portable-queries/pq04-aboutness.rq","form":"select"},
+    {"id":"PQ05","path":"mappings/design/portable-queries/pq05-no-retired-vocabulary.rq","form":"ask"}
+  ],
+  "datasets": {
+    "amazon-reviews-2023": {
+      "graph":"validation-results/mappings/amazon-reviews-2023.ttl",
+      "expect":{"PQ01":{"rows":1,"status":"supported"},"PQ02":{"rows":0,"status":"not-applicable"},"PQ03":{"rows":0,"status":"not-applicable"},"PQ04":{"rows":1,"status":"supported-direct"},"PQ05":{"ask":false,"status":"supported"}}
+    },
+    "reddit-convokit": {
+      "graph":"validation-results/mappings/reddit-convokit.ttl",
+      "expect":{"PQ01":{"rows":2,"status":"supported"},"PQ02":{"rows":1,"status":"supported"},"PQ03":{"rows":2,"status":"supported"},"PQ04":{"rows":0,"status":"not-asserted-without-evidence"},"PQ05":{"ask":false,"status":"supported"}}
+    },
+    "wikiconv": {
+      "graph":"validation-results/mappings/wikiconv.ttl",
+      "expect":{"PQ01":{"rows":2,"status":"supported"},"PQ02":{"rows":1,"status":"supported"},"PQ03":{"rows":2,"status":"supported"},"PQ04":{"rows":0,"status":"not-asserted-without-evidence"},"PQ05":{"ask":false,"status":"supported"}}
+    }
+  }
+}

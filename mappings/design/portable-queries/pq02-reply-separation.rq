@@ -1,0 +1,6 @@
+PREFIX cm: <https://w3id.org/commentium#>
+SELECT ?response ?predecessor ?anchor
+WHERE {
+  ?response a cm:Response ; cm:respondsTo ?predecessor ; cm:anchoredTo ?anchor .
+}
+ORDER BY ?response

@@ -1,0 +1,4 @@
+PREFIX cm: <https://w3id.org/commentium#>
+SELECT ?comment ?thread
+WHERE { ?comment cm:partOfThread ?thread . }
+ORDER BY ?comment

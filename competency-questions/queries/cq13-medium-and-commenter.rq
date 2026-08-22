@@ -2,6 +2,6 @@ PREFIX cm: <https://w3id.org/commentium#>
 PREFIX ex: <https://example.org/commentium-cq#>
 SELECT ?comment ?commenter
 WHERE {
-  ?comment a cm:Comment ; cm:via ex:medium1 ; cm:hasCommenter ?commenter .
+  ?comment cm:via ex:medium1 ; cm:hasCommenter ?commenter .
 }
 ORDER BY ?comment

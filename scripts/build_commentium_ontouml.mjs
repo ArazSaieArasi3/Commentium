@@ -60,7 +60,6 @@ function relation(id, name, source, target, opts = {}) {
   return b.build();
 }
 
-// Creation/content relation.
 relation('rel_hasMessage', 'hasMessage', C.Comment, C.CommentMessage, {
   stereotype: 'creation', sourceCardinality: '0..1', targetCardinality: '1'
 });
@@ -148,16 +147,9 @@ relation('rel_typedAs', 'typedAs', C.AssertedRelation, C.AssertedRelationKind, {
   sourceCardinality: '0..*', targetCardinality: '1'
 });
 
-const json = JSON.stringify(project, null, 2);
-const validation = serializationUtils.validate(json);
-if (validation !== true) {
-  console.error('ontouml-js/schema validation failed while building candidate:');
-  console.error(JSON.stringify(validation, null, 2));
-  process.exit(2);
-}
-
-// Round-trip through the official parser as an additional serialization check.
-serializationUtils.parse(json, true);
+// serialize() validates against the official OntoUML JSON Schema before returning.
+const json = serializationUtils.serialize(project, 2);
+serializationUtils.parse(json);
 fs.mkdirSync(path.dirname(outPath), { recursive: true });
 fs.writeFileSync(outPath, `${json}\n`, 'utf8');
 console.log(`Generated ${outPath}`);

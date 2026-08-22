@@ -1,0 +1,27 @@
+{
+  "evidenceVersion": "0.1",
+  "privacyPolicy": "Raw third-party text and account identifiers are not committed or uploaded. The acquisition job records checksums and emits structurally normalized, pseudonymized records only inside the ephemeral CI workspace.",
+  "datasets": {
+    "amazon-reviews-2023": {
+      "source": "McAuley-Lab/Amazon-Reviews-2023",
+      "config": "raw_review_All_Beauty",
+      "split": "full",
+      "acquisition": "Hugging Face datasets-server first-rows API",
+      "targetRecords": 25
+    },
+    "reddit-convokit": {
+      "source": "subreddit-Cornell",
+      "acquisition": "ConvoKit download()",
+      "maxConversations": 3,
+      "maxCommentsPerConversation": 12,
+      "requireNestedReply": true
+    },
+    "wikiconv": {
+      "source": "wikiconv-russian-2004",
+      "acquisition": "ConvoKit download()",
+      "maxConversations": 3,
+      "maxCommentsPerConversation": 12,
+      "requireNestedReply": true
+    }
+  }
+}

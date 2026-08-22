@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-import gzip
 import json
 from datetime import datetime, timezone
 from pathlib import Path
@@ -20,27 +19,26 @@ def amazon_sample_direct(cfg):
         raise ValueError(f"Unsupported Amazon review config: {cfg['config']}")
     category = cfg["config"][len(prefix):]
     url = (
-        "https://datarepo.eng.ucsd.edu/mcauley_group/data/amazon_2023/"
-        f"raw/review_categories/{category}.jsonl.gz"
+        "https://huggingface.co/datasets/McAuley-Lab/Amazon-Reviews-2023/"
+        f"resolve/main/raw/review_categories/{category}.jsonl?download=true"
     )
     target = int(cfg["targetRecords"])
     raw = []
-    with requests.get(url, stream=True, timeout=180) as response:
+    with requests.get(url, stream=True, timeout=180, allow_redirects=True) as response:
         response.raise_for_status()
         content_length = response.headers.get("Content-Length")
         etag = response.headers.get("ETag")
         last_modified = response.headers.get("Last-Modified")
-        response.raw.decode_content = False
-        with gzip.GzipFile(fileobj=response.raw, mode="rb") as gz:
-            while len(raw) < target:
-                line = gz.readline()
-                if not line:
-                    break
-                if line.strip():
-                    raw.append(json.loads(line.decode("utf-8")))
+        final_url = response.url
+        for line in response.iter_lines(decode_unicode=True):
+            if not line:
+                continue
+            raw.append(json.loads(line))
+            if len(raw) >= target:
+                break
 
     if len(raw) < min(10, target):
-        raise RuntimeError(f"Amazon direct acquisition returned too few rows: {len(raw)}")
+        raise RuntimeError(f"Amazon Hugging Face stream returned too few rows: {len(raw)}")
 
     normalized = []
     for row in raw:
@@ -73,13 +71,14 @@ def amazon_sample_direct(cfg):
         "config": cfg["config"],
         "split": cfg["split"],
         "sourceUrl": url,
+        "resolvedSourceUrl": final_url,
         "sourceRevisionReference": revision,
         "httpContentLength": content_length,
         "httpETag": etag,
         "httpLastModified": last_modified,
         "selectedRecords": len(raw),
         "rawSelectionSha256": base.canonical_sha(raw),
-        "selection": "first N JSONL records streamed from the official McAuley/UCSD category gzip; full archive not downloaded"
+        "selection": "first N JSONL records streamed from the official McAuley-Lab Hugging Face/Xet source; full file not persisted"
     }
 
 

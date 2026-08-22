@@ -8,15 +8,18 @@ on:
     paths:
       - 'scripts/build_commentium_ontouml.mjs'
       - 'scripts/verify_commentium_ontouml.mjs'
+      - 'scripts/check_gate_c_semantics.mjs'
       - 'validation/ontouml/**'
       - '.github/workflows/ontouml-verify.yml'
       - 'research/wave2/commentium-v2-candidate-model-v0.2.md'
+      - 'research/wave2/commentium-v2-candidate-model-v0.3.md'
   pull_request:
     branches:
       - main
     paths:
       - 'scripts/build_commentium_ontouml.mjs'
       - 'scripts/verify_commentium_ontouml.mjs'
+      - 'scripts/check_gate_c_semantics.mjs'
       - 'validation/ontouml/**'
       - '.github/workflows/ontouml-verify.yml'
       - 'research/wave2/**'
@@ -47,6 +50,12 @@ jobs:
         run: >-
           node scripts/build_commentium_ontouml.mjs
           research/wave2/commentium-v2-candidate-v0.3.ontouml.json
+
+      - name: Run Gate C semantic and anti-pattern guardrails
+        run: >-
+          node scripts/check_gate_c_semantics.mjs
+          research/wave2/commentium-v2-candidate-v0.3.ontouml.json
+          validation-results/ontouml/gate-c-semantic-checks.json
 
       - name: Verify schema, parser, and OntoUML Server
         run: >-

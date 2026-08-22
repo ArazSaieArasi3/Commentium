@@ -11,6 +11,15 @@ on:
       - 'validation/ontouml/**'
       - '.github/workflows/ontouml-verify.yml'
       - 'research/wave2/commentium-v2-candidate-model-v0.2.md'
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'scripts/build_commentium_ontouml.mjs'
+      - 'scripts/verify_commentium_ontouml.mjs'
+      - 'validation/ontouml/**'
+      - '.github/workflows/ontouml-verify.yml'
+      - 'research/wave2/**'
 
 permissions:
   contents: read

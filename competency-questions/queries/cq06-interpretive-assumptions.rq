@@ -1,0 +1,7 @@
+PREFIX cm: <https://w3id.org/commentium#>
+SELECT ?interpretation ?meaning ?assumption
+WHERE {
+  ?interpretation cm:producesMeaning ?meaning ; cm:basedOn ?assumption .
+  ?meaning cm:groundedIn ?assumption .
+}
+ORDER BY ?interpretation

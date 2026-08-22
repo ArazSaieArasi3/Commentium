@@ -1,0 +1,5 @@
+PREFIX cm: <https://w3id.org/commentium#>
+ASK {
+  VALUES ?retired { cm:playedBy cm:memberOf cm:isAboutOrDirectedTo }
+  ?s ?retired ?o .
+}

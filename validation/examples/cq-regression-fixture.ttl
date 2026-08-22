@@ -1,0 +1,68 @@
+@prefix cm: <https://w3id.org/commentium#> .
+@prefix ex: <https://example.org/commentium-cq#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+ex:comment1 a cm:Comment ;
+    cm:hasMessage ex:message1 ;
+    cm:anchoredTo ex:product1 ;
+    cm:hasCommenter ex:user1 ;
+    cm:occursIn ex:situation1 ;
+    cm:via ex:medium1 ;
+    cm:hasTime "2026-08-22T10:00:00Z"^^xsd:dateTime ;
+    cm:isAbout ex:product1 ;
+    cm:addresses ex:audience1 ;
+    cm:motivatedBy ex:intent1 ;
+    cm:reflects ex:stance1 ;
+    cm:partOfThread ex:thread1 .
+
+ex:response1 a cm:Response ;
+    cm:hasMessage ex:message2 ;
+    cm:anchoredTo ex:post1 ;
+    cm:hasCommenter ex:user2 ;
+    cm:occursIn ex:situation1 ;
+    cm:via ex:medium1 ;
+    cm:hasTime "2026-08-22T10:05:00Z"^^xsd:dateTime ;
+    cm:respondsTo ex:comment1 ;
+    cm:isAbout ex:product1 ;
+    cm:addresses ex:user1 ;
+    cm:partOfThread ex:thread1 .
+
+ex:message1 a cm:CommentMessage ;
+    cm:refersTo ex:reference1 ;
+    cm:hasExpressionStyle ex:style1 .
+ex:message2 a cm:CommentMessage .
+
+ex:product1 a cm:Commentable, cm:CommentSubject .
+ex:post1 a cm:Commentable .
+ex:user1 a cm:Agent, cm:Commenter, cm:IntendedAudience .
+ex:user2 a cm:Agent, cm:Commenter .
+ex:audience1 a cm:IntendedAudience .
+ex:reference1 a cm:ReferencedEntity .
+ex:situation1 a cm:Situation ; cm:governedBy ex:norm1 .
+ex:norm1 a cm:InteractionNorm .
+ex:medium1 a cm:Medium .
+ex:thread1 a cm:CommentThread .
+
+ex:intent1 a cm:Intent ; cm:intentInheresIn ex:user1 .
+ex:stance1 a cm:Stance ; cm:stanceInheresIn ex:user1 .
+ex:style1 a cm:ExpressionStyle ; cm:styleInheresIn ex:message1 .
+
+ex:interpretation1 a cm:Interpretation ;
+    cm:performedBy ex:interpreter1 ;
+    cm:interpretsMessage ex:message1 ;
+    cm:producesMeaning ex:meaning1 ;
+    cm:basedOn ex:assumption1 .
+ex:interpreter1 a cm:Agent .
+ex:meaning1 a cm:InterpretedMeaning ; cm:groundedIn ex:assumption1 .
+ex:assumption1 a cm:InterpretiveAssumption .
+
+ex:assertion1 a cm:AssertedRelation ;
+    cm:assertedIn ex:message1 ;
+    cm:typedAs cm:cites ;
+    cm:involvesSubject ex:product1 ;
+    cm:involvesReference ex:reference1 .
+
+ex:assertion2 a cm:AssertedRelation ;
+    cm:assertedIn ex:message1 ;
+    cm:typedAs cm:questions ;
+    cm:involvesSubject ex:product1 .

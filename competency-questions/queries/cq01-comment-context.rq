@@ -1,0 +1,12 @@
+PREFIX cm: <https://w3id.org/commentium#>
+PREFIX ex: <https://example.org/commentium-cq#>
+SELECT ?message ?anchor ?commenter ?situation ?medium ?timeValue
+WHERE {
+  ex:comment1 cm:hasMessage ?message ;
+              cm:anchoredTo ?anchor ;
+              cm:hasCommenter ?commenter ;
+              cm:occursIn ?situation ;
+              cm:via ?medium ;
+              cm:hasTime ?time .
+  BIND(STR(?time) AS ?timeValue)
+}

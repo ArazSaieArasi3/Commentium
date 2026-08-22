@@ -1,0 +1,8 @@
+PREFIX cm: <https://w3id.org/commentium#>
+PREFIX ex: <https://example.org/commentium-cq#>
+SELECT ?intent ?intentBearer ?stance ?stanceBearer
+WHERE {
+  ex:comment1 cm:motivatedBy ?intent ; cm:reflects ?stance .
+  ?intent cm:intentInheresIn ?intentBearer .
+  ?stance cm:stanceInheresIn ?stanceBearer .
+}

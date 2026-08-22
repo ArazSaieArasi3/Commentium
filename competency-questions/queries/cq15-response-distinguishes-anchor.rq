@@ -1,0 +1,6 @@
+PREFIX cm: <https://w3id.org/commentium#>
+PREFIX ex: <https://example.org/commentium-cq#>
+ASK {
+  ex:response1 a cm:Response ; cm:respondsTo ?predecessor ; cm:anchoredTo ?anchor .
+  FILTER(?predecessor != ?anchor)
+}

@@ -1,0 +1,9 @@
+PREFIX cm: <https://w3id.org/commentium#>
+PREFIX ex: <https://example.org/commentium-cq#>
+SELECT ?assertion ?kind ?subject ?reference
+WHERE {
+  ?assertion a cm:AssertedRelation ; cm:assertedIn ex:message1 ; cm:typedAs ?kind .
+  OPTIONAL { ?assertion cm:involvesSubject ?subject . }
+  OPTIONAL { ?assertion cm:involvesReference ?reference . }
+}
+ORDER BY ?assertion

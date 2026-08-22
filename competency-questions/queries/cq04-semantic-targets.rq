@@ -1,0 +1,7 @@
+PREFIX cm: <https://w3id.org/commentium#>
+PREFIX ex: <https://example.org/commentium-cq#>
+SELECT ?subject ?audience ?reference
+WHERE {
+  ex:comment1 cm:isAbout ?subject ; cm:addresses ?audience ; cm:hasMessage ?message .
+  ?message cm:refersTo ?reference .
+}

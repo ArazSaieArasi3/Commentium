@@ -1,0 +1,6 @@
+PREFIX cm: <https://w3id.org/commentium#>
+PREFIX ex: <https://example.org/commentium-cq#>
+SELECT ?anchor ?predecessor
+WHERE {
+  ex:response1 cm:anchoredTo ?anchor ; cm:respondsTo ?predecessor .
+}

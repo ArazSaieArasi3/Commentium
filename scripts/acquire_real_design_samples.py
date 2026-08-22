@@ -1,18 +1,20 @@
 #!/usr/bin/env python3
 import hashlib
+import io
 import json
+import zipfile
 from collections import defaultdict
 from datetime import datetime, timezone
 from pathlib import Path
+from urllib.parse import quote
 
 import requests
-from convokit import Corpus, download
 
 ROOT = Path(__file__).resolve().parents[1]
 MANIFEST = ROOT / "mappings" / "design" / "real-sample-manifest.json"
 OUT = ROOT / "validation-results" / "real-samples"
 NORMALIZED = OUT / "normalized"
-CACHE = OUT / "convokit-cache"
+CACHE = OUT / "source-cache"
 
 
 def stable_hash(namespace, value):
@@ -74,37 +76,104 @@ def amazon_sample(cfg):
     }
 
 
-def utterance_record(utt, wiki=False):
-    speaker = getattr(getattr(utt, "speaker", None), "id", None) or "opaque"
-    meta = dict(getattr(utt, "meta", {}) or {})
-    record = {
-        "id": str(utt.id),
-        "speaker": str(speaker),
-        "conversation_id": str(utt.conversation_id),
-        "reply_to": None if utt.reply_to is None else str(utt.reply_to),
-        "timestamp": utt.timestamp,
-        "text": utt.text or "",
-        "meta": meta,
-    }
-    if wiki:
-        record["type"] = getattr(utt, "type", None) or meta.get("type") or ""
-    return record
+def get_with_https_fallback(url, *, timeout=180):
+    candidates = [url]
+    if url.startswith("http://"):
+        candidates.insert(0, "https://" + url[len("http://"):])
+    errors = []
+    for candidate in candidates:
+        try:
+            response = requests.get(candidate, timeout=timeout)
+            if response.ok:
+                return response, candidate
+            errors.append(f"{candidate}: HTTP {response.status_code}")
+        except requests.RequestException as exc:
+            errors.append(f"{candidate}: {type(exc).__name__}: {exc}")
+    raise RuntimeError("All source URL attempts failed: " + " | ".join(errors))
 
 
-def select_nested_conversations(corpus, max_conversations, max_comments, wiki=False):
+def subreddit_url(subreddit):
+    base = "http://zissou.infosci.cornell.edu/convokit/datasets/subreddit-corpus/"
+    response, _ = get_with_https_fallback(base + "subreddit-groupings.txt", timeout=120)
+    groups = [line.strip() for line in response.text.splitlines() if line.strip()]
+    for group in groups:
+        bounds = group.split("~-~")
+        if bounds[0] <= subreddit <= bounds[-1]:
+            return base + "corpus-zipped/" + quote(group, safe="~-_") + "/" + quote(subreddit, safe="_-.") + ".corpus.zip"
+    raise RuntimeError(f"Subreddit {subreddit} was not found in ConvoKit grouping index")
+
+
+def wikiconv_url(name):
+    parts = name.split("-")
+    if len(parts) != 3:
+        raise ValueError(f"Expected wikiconv-<language>-<year>, got {name}")
+    _, language, year = parts
+    return f"http://zissou.infosci.cornell.edu/convokit/datasets/wikiconv-corpus/corpus-zipped/{language}/wikiconv-{year}/full.corpus.zip"
+
+
+def download_corpus_zip(name):
+    if name.startswith("subreddit-"):
+        url = subreddit_url(name.split("-", 1)[1])
+    elif name.startswith("wikiconv-"):
+        url = wikiconv_url(name)
+    else:
+        raise ValueError(f"Unsupported ConvoKit corpus name: {name}")
+
+    response, used_url = get_with_https_fallback(url, timeout=300)
+    CACHE.mkdir(parents=True, exist_ok=True)
+    path = CACHE / f"{name}.zip"
+    path.write_bytes(response.content)
+    return path, used_url, hashlib.sha256(response.content).hexdigest()
+
+
+def read_utterances_from_zip(path, *, wiki=False):
+    with zipfile.ZipFile(path, "r") as archive:
+        names = archive.namelist()
+        jsonl = next((n for n in names if n.endswith("utterances.jsonl")), None)
+        json_file = next((n for n in names if n.endswith("utterances.json")), None)
+        if jsonl:
+            raw_rows = [json.loads(line) for line in archive.read(jsonl).decode("utf-8").splitlines() if line.strip()]
+        elif json_file:
+            loaded = json.loads(archive.read(json_file).decode("utf-8"))
+            raw_rows = loaded if isinstance(loaded, list) else list(loaded.values())
+        else:
+            raise RuntimeError(f"No utterances.jsonl/json found in {path.name}; members={names[:20]}")
+
+    rows = []
+    for raw in raw_rows:
+        speaker = raw.get("speaker")
+        if isinstance(speaker, dict):
+            speaker = speaker.get("id") or speaker.get("name")
+        meta = raw.get("meta") or {}
+        row = {
+            "id": str(raw.get("id")),
+            "speaker": str(speaker or "opaque"),
+            "conversation_id": str(raw.get("conversation_id")),
+            "reply_to": None if raw.get("reply_to") is None else str(raw.get("reply_to")),
+            "timestamp": raw.get("timestamp"),
+            "text": raw.get("text") or "",
+            "meta": meta,
+        }
+        if wiki:
+            row["type"] = raw.get("type") or meta.get("type") or ""
+        rows.append(row)
+    return rows
+
+
+def select_nested_conversations(rows, max_conversations, max_comments, *, wiki=False):
     groups = defaultdict(list)
-    for utt in corpus.iter_utterances():
-        groups[str(utt.conversation_id)].append(utterance_record(utt, wiki=wiki))
+    for row in rows:
+        groups[str(row["conversation_id"])].append(row)
 
     selected = []
     selected_groups = 0
     for conversation_id in sorted(groups):
-        rows = groups[conversation_id]
-        by_id = {r["id"]: r for r in rows}
+        group = groups[conversation_id]
+        by_id = {r["id"]: r for r in group}
         root = by_id.get(conversation_id)
         if root is None:
             continue
-        candidate_comments = [r for r in rows if r["id"] != conversation_id]
+        candidate_comments = [r for r in group if r["id"] != conversation_id]
         if wiki:
             candidate_comments = [r for r in candidate_comments if not bool((r.get("meta") or {}).get("is_section_header", False))]
         candidate_ids = {r["id"] for r in candidate_comments}
@@ -113,8 +182,7 @@ def select_nested_conversations(corpus, max_conversations, max_comments, wiki=Fa
             continue
         parent = by_id.get(nested["reply_to"])
         chosen = [root]
-        must = [parent, nested]
-        for r in must:
+        for r in (parent, nested):
             if r and r not in chosen:
                 chosen.append(r)
         ordered = sorted(candidate_comments, key=lambda r: ((r.get("timestamp") or 0), r["id"]))
@@ -127,11 +195,11 @@ def select_nested_conversations(corpus, max_conversations, max_comments, wiki=Fa
             break
 
     if selected_groups == 0:
-        raise RuntimeError("No conversation with a resolvable nested reply was found in the selected corpus")
+        raise RuntimeError("No conversation with a resolvable nested reply was found in the bounded corpus")
     return selected, selected_groups
 
 
-def normalize_conversation_rows(dataset, raw, wiki=False):
+def normalize_conversation_rows(dataset, raw, *, wiki=False):
     id_map = {r["id"]: stable_hash(f"{dataset}-utterance", r["id"]) for r in raw}
     conv_map = {r["conversation_id"]: stable_hash(f"{dataset}-conversation", r["conversation_id"]) for r in raw}
     normalized = []
@@ -165,16 +233,17 @@ def normalize_conversation_rows(dataset, raw, wiki=False):
     return normalized
 
 
-def convokit_sample(cfg, dataset, wiki=False):
-    CACHE.mkdir(parents=True, exist_ok=True)
-    path = download(cfg["source"], data_dir=str(CACHE))
-    corpus = Corpus(filename=path)
+def corpus_sample(cfg, dataset, *, wiki=False):
+    path, source_url, archive_sha = download_corpus_zip(cfg["source"])
+    corpus_rows = read_utterances_from_zip(path, wiki=wiki)
     raw, conversations = select_nested_conversations(
-        corpus, int(cfg["maxConversations"]), int(cfg["maxCommentsPerConversation"]), wiki=wiki
+        corpus_rows, int(cfg["maxConversations"]), int(cfg["maxCommentsPerConversation"]), wiki=wiki
     )
     normalized = normalize_conversation_rows(dataset, raw, wiki=wiki)
     return normalized, {
-        "source": cfg["source"], "downloadPathName": Path(path).name,
+        "source": cfg["source"], "sourceUrl": source_url,
+        "downloadArchiveSha256": archive_sha,
+        "corpusUtterancesRead": len(corpus_rows),
         "selectedRecords": len(raw), "selectedConversations": conversations,
         "rawSelectionSha256": canonical_sha(raw),
         "selection": "first lexicographically ordered conversations with a resolvable nested reply; bounded by manifest limits"
@@ -192,8 +261,8 @@ def main():
     }
 
     amazon, amazon_meta = amazon_sample(cfg["datasets"]["amazon-reviews-2023"])
-    reddit, reddit_meta = convokit_sample(cfg["datasets"]["reddit-convokit"], "reddit-convokit", wiki=False)
-    wiki, wiki_meta = convokit_sample(cfg["datasets"]["wikiconv"], "wikiconv", wiki=True)
+    reddit, reddit_meta = corpus_sample(cfg["datasets"]["reddit-convokit"], "reddit-convokit", wiki=False)
+    wiki, wiki_meta = corpus_sample(cfg["datasets"]["wikiconv"], "wikiconv", wiki=True)
 
     for dataset, rows, meta in [
         ("amazon-reviews-2023", amazon, amazon_meta),

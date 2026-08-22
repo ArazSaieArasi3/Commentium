@@ -13,6 +13,10 @@
     owl:versionInfo "2.0.0-candidate-gate-c" ;
     rdfs:seeAlso <https://github.com/ArazSaieArasi3/Commentium> .
 
+# Explicit declarations keep external metadata vocabulary inside OWL 2 DL.
+dcterms:title a owl:AnnotationProperty .
+dcterms:description a owl:AnnotationProperty .
+dcterms:license a owl:AnnotationProperty .
 cm:hasStereotype a owl:AnnotationProperty .
 cm:operationalLayer a owl:AnnotationProperty .
 cm:replacementNote a owl:AnnotationProperty .

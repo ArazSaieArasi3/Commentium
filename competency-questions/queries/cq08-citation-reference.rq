@@ -1,0 +1,6 @@
+PREFIX cm: <https://w3id.org/commentium#>
+SELECT ?assertion ?reference
+WHERE {
+  ?assertion a cm:AssertedRelation ; cm:typedAs cm:cites ; cm:involvesReference ?reference .
+}
+ORDER BY ?assertion

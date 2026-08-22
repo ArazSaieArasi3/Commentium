@@ -1,0 +1,5 @@
+PREFIX cm: <https://w3id.org/commentium#>
+PREFIX ex: <https://example.org/commentium-cq#>
+SELECT ?comment
+WHERE { ?comment cm:partOfThread ex:thread1 . }
+ORDER BY ?comment

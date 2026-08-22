@@ -1,0 +1,74 @@
+name: OntoUML Verify
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - journal-v2-discovery
+    paths:
+      - 'scripts/build_commentium_ontouml.mjs'
+      - 'scripts/verify_commentium_ontouml.mjs'
+      - 'scripts/check_gate_c_semantics.mjs'
+      - 'validation/ontouml/**'
+      - '.github/workflows/ontouml-verify.yml'
+      - 'research/wave2/commentium-v2-candidate-model-v0.2.md'
+      - 'research/wave2/commentium-v2-candidate-model-v0.3.md'
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'scripts/build_commentium_ontouml.mjs'
+      - 'scripts/verify_commentium_ontouml.mjs'
+      - 'scripts/check_gate_c_semantics.mjs'
+      - 'validation/ontouml/**'
+      - '.github/workflows/ontouml-verify.yml'
+      - 'research/wave2/**'
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Install pinned OntoUML toolchain
+        run: >-
+          npm install --no-save --package-lock=false
+          ontouml-js@1.0.0 ontouml-schema@1.0.2
+          ajv@8.20.0 ajv-formats@3.0.1
+
+      - name: Build official OntoUML JSON candidate
+        run: >-
+          node scripts/build_commentium_ontouml.mjs
+          research/wave2/commentium-v2-candidate-v0.3.ontouml.json
+
+      - name: Run Gate C semantic and anti-pattern guardrails
+        run: >-
+          node scripts/check_gate_c_semantics.mjs
+          research/wave2/commentium-v2-candidate-v0.3.ontouml.json
+          validation-results/ontouml/gate-c-semantic-checks.json
+
+      - name: Verify schema, parser, and OntoUML Server
+        run: >-
+          node scripts/verify_commentium_ontouml.mjs
+          research/wave2/commentium-v2-candidate-v0.3.ontouml.json
+          validation-results/ontouml
+
+      - name: Upload verification evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: commentium-ontouml-verification
+          path: |
+            research/wave2/commentium-v2-candidate-v0.3.ontouml.json
+            validation-results/ontouml/**
+          if-no-files-found: warn

@@ -1,0 +1,9 @@
+PREFIX cm: <https://w3id.org/commentium#>
+SELECT ?interpretation ?agent ?message ?meaning
+WHERE {
+  ?interpretation a cm:Interpretation ;
+                  cm:performedBy ?agent ;
+                  cm:interpretsMessage ?message ;
+                  cm:producesMeaning ?meaning .
+}
+ORDER BY ?interpretation

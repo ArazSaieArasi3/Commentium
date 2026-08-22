@@ -1,0 +1,32 @@
+@prefix cm: <https://w3id.org/commentium#> .
+@prefix ex: <https://example.org/commentium-test#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+# Invalid: missing anchor, commenter, situation, and medium; two messages; wrong time datatype.
+ex:badComment a cm:Comment ;
+    cm:hasMessage ex:messageA, ex:messageB ;
+    cm:hasTime "2026-08-22"^^xsd:date .
+
+ex:messageA a cm:CommentMessage .
+ex:messageB a cm:CommentMessage .
+
+# Invalid: self-loop/cycle response.
+ex:badResponse a cm:Response ;
+    cm:hasMessage ex:responseMessage ;
+    cm:anchoredTo ex:host ;
+    cm:hasCommenter ex:author ;
+    cm:occursIn ex:situation ;
+    cm:via ex:medium ;
+    cm:hasTime "2026-08-22T10:05:00Z"^^xsd:dateTime ;
+    cm:respondsTo ex:badResponse .
+
+ex:responseMessage a cm:CommentMessage .
+ex:host a cm:Commentable .
+ex:author a cm:Agent, cm:Commenter .
+ex:situation a cm:Situation .
+ex:medium a cm:Medium .
+
+# Invalid: citation has neither subject nor reference and therefore violates both the OR rule and citation-specific rule.
+ex:badAssertion a cm:AssertedRelation ;
+    cm:assertedIn ex:messageA ;
+    cm:typedAs cm:cites .

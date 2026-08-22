@@ -1,0 +1,57 @@
+name: Design Dataset Mappings
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - journal-v2-discovery
+    paths:
+      - 'mappings/design/**'
+      - 'scripts/map_design_datasets.py'
+      - 'scripts/test_mapping_portability.py'
+      - 'ontology/**'
+      - 'validation/commentium-v2.shacl.ttl'
+      - '.github/workflows/design-mappings.yml'
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'mappings/design/**'
+      - 'scripts/map_design_datasets.py'
+      - 'scripts/test_mapping_portability.py'
+      - 'ontology/**'
+      - 'validation/commentium-v2.shacl.ttl'
+      - '.github/workflows/design-mappings.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  map-and-test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install pinned semantic mapping toolchain
+        run: python -m pip install --disable-pip-version-check pyshacl==0.40.1
+
+      - name: Generate design-dataset RDF mappings
+        run: python scripts/map_design_datasets.py
+
+      - name: Validate mappings and portable CQs
+        run: python scripts/test_mapping_portability.py
+
+      - name: Upload mapping evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: commentium-design-mappings
+          path: validation-results/mappings/**
+          if-no-files-found: warn

@@ -1,0 +1,7 @@
+PREFIX cm: <https://w3id.org/commentium#>
+PREFIX ex: <https://example.org/commentium-cq#>
+SELECT ?situation ?norm
+WHERE {
+  ex:comment1 cm:occursIn ?situation .
+  ?situation cm:governedBy ?norm .
+}

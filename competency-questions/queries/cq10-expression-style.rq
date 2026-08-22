@@ -1,0 +1,7 @@
+PREFIX cm: <https://w3id.org/commentium#>
+PREFIX ex: <https://example.org/commentium-cq#>
+SELECT ?message ?style
+WHERE {
+  ex:comment1 cm:hasMessage ?message .
+  ?message cm:hasExpressionStyle ?style .
+}

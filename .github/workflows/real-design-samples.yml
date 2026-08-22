@@ -1,0 +1,76 @@
+name: Real Design Sample Evidence
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - journal-v2-discovery
+    paths:
+      - 'mappings/design/real-sample-manifest.json'
+      - 'scripts/acquire_real_design_samples.py'
+      - 'scripts/acquire_real_design_samples_http.py'
+      - 'scripts/map_real_design_samples.py'
+      - 'scripts/test_real_mapping_portability.py'
+      - 'scripts/map_design_datasets.py'
+      - 'ontology/**'
+      - 'validation/commentium-v2.shacl.ttl'
+      - '.github/workflows/real-design-samples.yml'
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'mappings/design/real-sample-manifest.json'
+      - 'scripts/acquire_real_design_samples.py'
+      - 'scripts/acquire_real_design_samples_http.py'
+      - 'scripts/map_real_design_samples.py'
+      - 'scripts/test_real_mapping_portability.py'
+      - 'scripts/map_design_datasets.py'
+      - 'ontology/**'
+      - 'validation/commentium-v2.shacl.ttl'
+      - '.github/workflows/real-design-samples.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  acquire-map-test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install pinned acquisition and semantic toolchain
+        run: >-
+          python -m pip install --disable-pip-version-check
+          requests==2.32.5 pyshacl==0.40.1
+
+      - name: Acquire bounded real samples without persisting raw text
+        run: python scripts/acquire_real_design_samples_http.py
+
+      - name: Map pseudonymized real structural samples
+        run: python scripts/map_real_design_samples.py
+
+      - name: Validate real mappings and portable semantics
+        run: python scripts/test_real_mapping_portability.py
+
+      - name: Remove transient downloaded corpora and normalized samples before upload
+        if: always()
+        run: |
+          rm -rf validation-results/real-samples/source-cache
+          rm -rf validation-results/real-samples/normalized
+
+      - name: Upload provenance and derived semantic evidence only
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: commentium-real-design-sample-evidence
+          path: |
+            validation-results/real-samples/provenance.json
+            validation-results/real-mappings/**
+          if-no-files-found: warn

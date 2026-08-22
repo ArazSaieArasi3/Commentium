@@ -1,0 +1,82 @@
+name: Semantic Artifacts
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - journal-v2-discovery
+    paths:
+      - 'ontology/**'
+      - 'validation/**'
+      - 'scripts/validate_semantic_artifacts.py'
+      - 'docs/migration-v1-to-v2.md'
+      - '.github/workflows/semantic-artifacts.yml'
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'ontology/**'
+      - 'validation/**'
+      - 'scripts/validate_semantic_artifacts.py'
+      - 'docs/migration-v1-to-v2.md'
+      - '.github/workflows/semantic-artifacts.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install pinned SHACL validator
+        run: python -m pip install --disable-pip-version-check pyshacl==0.40.1
+
+      - name: Parse OWL and SHACL and run positive/negative SHACL fixtures
+        run: python scripts/validate_semantic_artifacts.py
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - name: Download pinned ROBOT 1.9.10
+        run: |
+          mkdir -p validation-results/owl
+          curl --fail --location --retry 3 \
+            --output validation-results/owl/robot.jar \
+            https://github.com/ontodev/robot/releases/download/v1.9.10/robot.jar
+
+      - name: Validate OWL 2 DL profile
+        run: >-
+          java -jar validation-results/owl/robot.jar validate-profile
+          --profile DL
+          --input ontology/commentium-v2-candidate.ttl
+          --output validation-results/owl/dl-profile.txt
+
+      - name: Run HermiT logical validation and classification
+        run: >-
+          java -jar validation-results/owl/robot.jar reason
+          --reasoner hermit
+          --input ontology/commentium-v2-candidate.ttl
+          --output validation-results/owl/reasoned.owl
+
+      - name: Upload semantic validation evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: commentium-semantic-artifacts-validation
+          path: |
+            validation-results/shacl/**
+            validation-results/owl/dl-profile.txt
+            validation-results/owl/reasoned.owl
+          if-no-files-found: warn

@@ -1,0 +1,123 @@
+@prefix cm: <https://w3id.org/commentium#> .
+@prefix cmsh: <https://w3id.org/commentium/shapes#> .
+@prefix sh: <http://www.w3.org/ns/shacl#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+cmsh:CommentShape
+    a sh:NodeShape ;
+    sh:targetClass cm:Comment ;
+    sh:property [
+        sh:path cm:hasMessage ;
+        sh:class cm:CommentMessage ;
+        sh:minCount 1 ; sh:maxCount 1 ;
+        sh:message "A Comment must have exactly one CommentMessage."@en
+    ] ;
+    sh:property [
+        sh:path cm:anchoredTo ;
+        sh:class cm:Commentable ;
+        sh:minCount 1 ;
+        sh:message "A Comment must have at least one structural Commentable anchor."@en
+    ] ;
+    sh:property [
+        sh:path cm:hasCommenter ;
+        sh:class cm:Commenter ;
+        sh:minCount 1 ;
+        sh:message "A Comment must have at least one authoring Commenter; unresolved identity is represented by an opaque/local Agent rather than omitted authorship."@en
+    ] ;
+    sh:property [
+        sh:path cm:occursIn ;
+        sh:class cm:Situation ;
+        sh:minCount 1 ;
+        sh:message "A Comment must occur in at least one contextual Situation."@en
+    ] ;
+    sh:property [
+        sh:path cm:via ;
+        sh:class cm:Medium ;
+        sh:minCount 1 ;
+        sh:message "A Comment must be associated with at least one communication Medium."@en
+    ] ;
+    sh:property [
+        sh:path cm:hasTime ;
+        sh:datatype xsd:dateTime ;
+        sh:minCount 1 ; sh:maxCount 1 ;
+        sh:message "A Comment must have exactly one normalized xsd:dateTime temporal value."@en
+    ] .
+
+cmsh:ResponseShape
+    a sh:NodeShape ;
+    sh:targetClass cm:Response ;
+    sh:property [
+        sh:path cm:respondsTo ;
+        sh:class cm:Comment ;
+        sh:minCount 1 ;
+        sh:message "A Response must respond to at least one prior Comment event."@en
+    ] ;
+    sh:sparql [
+        a sh:SPARQLConstraint ;
+        sh:message "A Response must not respond to itself."@en ;
+        sh:select """
+            SELECT $this
+            WHERE { $this cm:respondsTo $this . }
+        """
+    ] ;
+    sh:sparql [
+        a sh:SPARQLConstraint ;
+        sh:message "Response graphs must not contain a respondsTo cycle reachable from the same Response."@en ;
+        sh:select """
+            SELECT $this
+            WHERE { $this cm:respondsTo+ $this . }
+        """
+    ] .
+
+cmsh:InterpretationShape
+    a sh:NodeShape ;
+    sh:targetClass cm:Interpretation ;
+    sh:property [
+        sh:path cm:performedBy ;
+        sh:class cm:Agent ;
+        sh:minCount 1 ;
+        sh:message "An Interpretation must have at least one interpreting Agent."@en
+    ] ;
+    sh:property [
+        sh:path cm:interpretsMessage ;
+        sh:class cm:CommentMessage ;
+        sh:minCount 1 ; sh:maxCount 1 ;
+        sh:message "An Interpretation must interpret exactly one CommentMessage."@en
+    ] ;
+    sh:property [
+        sh:path cm:producesMeaning ;
+        sh:class cm:InterpretedMeaning ;
+        sh:minCount 1 ;
+        sh:message "An Interpretation must produce at least one InterpretedMeaning."@en
+    ] .
+
+cmsh:AssertedRelationShape
+    a sh:NodeShape ;
+    sh:targetClass cm:AssertedRelation ;
+    sh:property [
+        sh:path cm:assertedIn ;
+        sh:class cm:CommentMessage ;
+        sh:minCount 1 ; sh:maxCount 1 ;
+        sh:message "A materialized AssertedRelation must be asserted in exactly one CommentMessage."@en
+    ] ;
+    sh:property [
+        sh:path cm:typedAs ;
+        sh:class cm:AssertedRelationKind ;
+        sh:minCount 1 ; sh:maxCount 1 ;
+        sh:message "A materialized AssertedRelation must have exactly one AssertedRelationKind."@en
+    ] ;
+    sh:or (
+        [ sh:property [ sh:path cm:involvesSubject ; sh:minCount 1 ] ]
+        [ sh:property [ sh:path cm:involvesReference ; sh:minCount 1 ] ]
+    ) ;
+    sh:sparql [
+        a sh:SPARQLConstraint ;
+        sh:message "An asserted citation must involve at least one referenced entity."@en ;
+        sh:select """
+            SELECT $this
+            WHERE {
+              $this cm:typedAs cm:cites .
+              FILTER NOT EXISTS { $this cm:involvesReference ?reference . }
+            }
+        """
+    ] .

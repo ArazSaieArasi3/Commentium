@@ -1,0 +1,253 @@
+@prefix cm: <https://w3id.org/commentium#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+<https://w3id.org/commentium>
+    a owl:Ontology ;
+    dcterms:title "Commentium Ontology — v2 implementation candidate"@en ;
+    dcterms:description "Gate-C-frozen OWL 2 operationalization candidate for Commentium v2. This artifact is not yet a public stable release."@en ;
+    dcterms:license <https://creativecommons.org/publicdomain/zero/1.0/> ;
+    owl:versionInfo "2.0.0-candidate-gate-c" ;
+    rdfs:seeAlso <https://github.com/ArazSaieArasi3/Commentium> .
+
+# Explicit declarations keep external metadata vocabulary inside OWL 2 DL.
+dcterms:title a owl:AnnotationProperty .
+dcterms:description a owl:AnnotationProperty .
+dcterms:license a owl:AnnotationProperty .
+cm:hasStereotype a owl:AnnotationProperty .
+cm:operationalLayer a owl:AnnotationProperty .
+cm:replacementNote a owl:AnnotationProperty .
+
+### Core concepts
+
+cm:Comment a owl:Class ;
+    rdfs:label "Comment"@en ;
+    rdfs:comment "A communicative event representing an act of commenting in context."@en ;
+    cm:hasStereotype "event" ;
+    rdfs:subClassOf
+        [ a owl:Restriction ; owl:onProperty cm:hasMessage ; owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger ; owl:onClass cm:CommentMessage ],
+        [ a owl:Restriction ; owl:onProperty cm:anchoredTo ; owl:minQualifiedCardinality "1"^^xsd:nonNegativeInteger ; owl:onClass cm:Commentable ],
+        [ a owl:Restriction ; owl:onProperty cm:hasCommenter ; owl:minQualifiedCardinality "1"^^xsd:nonNegativeInteger ; owl:onClass cm:Commenter ],
+        [ a owl:Restriction ; owl:onProperty cm:occursIn ; owl:minQualifiedCardinality "1"^^xsd:nonNegativeInteger ; owl:onClass cm:Situation ],
+        [ a owl:Restriction ; owl:onProperty cm:via ; owl:minQualifiedCardinality "1"^^xsd:nonNegativeInteger ; owl:onClass cm:Medium ],
+        [ a owl:Restriction ; owl:onProperty cm:hasTime ; owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger ; owl:onDataRange cm:Time ] .
+
+cm:Response a owl:Class ;
+    rdfs:label "Response"@en ;
+    rdfs:comment "A Comment event that responds to one or more prior Comment events."@en ;
+    cm:hasStereotype "event" ;
+    rdfs:subClassOf cm:Comment,
+        [ a owl:Restriction ; owl:onProperty cm:respondsTo ; owl:minQualifiedCardinality "1"^^xsd:nonNegativeInteger ; owl:onClass cm:Comment ] .
+
+cm:CommentThread a owl:Class ;
+    rdfs:label "Comment Thread"@en ;
+    rdfs:comment "A complex conversational event composed of participating Comment events."@en ;
+    cm:hasStereotype "event" .
+
+cm:Commentable a owl:Class ;
+    rdfs:label "Commentable"@en ;
+    rdfs:comment "A derived historical role mixin for persistent resources that structurally anchor Comment events."@en ;
+    cm:hasStereotype "historicalRoleMixin" .
+
+cm:Agent a owl:Class ;
+    rdfs:label "Agent"@en ;
+    rdfs:comment "A category covering identity-bearing agents capable of participating in comment-related activities."@en ;
+    cm:hasStereotype "category" .
+
+cm:Commenter a owl:Class ;
+    rdfs:label "Commenter"@en ;
+    rdfs:comment "A historical role mixin borne by an Agent that participates as an author of a Comment."@en ;
+    rdfs:subClassOf cm:Agent ;
+    cm:hasStereotype "historicalRoleMixin" .
+
+cm:IntendedAudience a owl:Class ;
+    rdfs:label "Intended Audience"@en ;
+    rdfs:comment "A derived role-mixin view for an entity addressed by a Comment."@en ;
+    cm:hasStereotype "roleMixin" ;
+    cm:operationalLayer "derived" .
+
+cm:CommentSubject a owl:Class ;
+    rdfs:label "Comment Subject"@en ;
+    rdfs:comment "A derived role-mixin view for an entity that is the semantic subject of a Comment."@en ;
+    cm:hasStereotype "roleMixin" ;
+    cm:operationalLayer "derived" .
+
+cm:ReferencedEntity a owl:Class ;
+    rdfs:label "Referenced Entity"@en ;
+    rdfs:comment "A derived role-mixin view for an entity referenced in CommentMessage content."@en ;
+    cm:hasStereotype "roleMixin" ;
+    cm:operationalLayer "derived" .
+
+cm:Interpretation a owl:Class ;
+    rdfs:label "Interpretation"@en ;
+    rdfs:comment "An interpretive event in which an Agent interprets a CommentMessage and meaning is produced."@en ;
+    cm:hasStereotype "event" ;
+    rdfs:subClassOf
+        [ a owl:Restriction ; owl:onProperty cm:performedBy ; owl:minQualifiedCardinality "1"^^xsd:nonNegativeInteger ; owl:onClass cm:Agent ],
+        [ a owl:Restriction ; owl:onProperty cm:interpretsMessage ; owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger ; owl:onClass cm:CommentMessage ],
+        [ a owl:Restriction ; owl:onProperty cm:producesMeaning ; owl:minQualifiedCardinality "1"^^xsd:nonNegativeInteger ; owl:onClass cm:InterpretedMeaning ] .
+
+cm:InterpretedMeaning a owl:Class ;
+    rdfs:label "Interpreted Meaning"@en ;
+    rdfs:comment "An information object representing meaning produced through Interpretation."@en ;
+    cm:hasStereotype "kind" ;
+    cm:operationalLayer "analytical" .
+
+cm:InterpretiveAssumption a owl:Class ;
+    rdfs:label "Interpretive Assumption"@en ;
+    rdfs:comment "An information object representing an assumption used in interpretation."@en ;
+    cm:hasStereotype "kind" ;
+    cm:operationalLayer "analytical/contextual" .
+
+cm:AssertedRelation a owl:Class ;
+    rdfs:label "Asserted Relation"@en ;
+    rdfs:comment "A propositional/information object representing a relation asserted in message content; it is not a real-world relational truth-maker."@en ;
+    cm:hasStereotype "kind" ;
+    cm:operationalLayer "analytical" ;
+    rdfs:subClassOf
+        [ a owl:Restriction ; owl:onProperty cm:assertedIn ; owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger ; owl:onClass cm:CommentMessage ],
+        [ a owl:Restriction ; owl:onProperty cm:typedAs ; owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger ; owl:onClass cm:AssertedRelationKind ] .
+
+cm:AssertedRelationKind a owl:Class ;
+    rdfs:label "Asserted Relation Kind"@en ;
+    rdfs:comment "A controlled enumeration for materialized asserted-relation kinds."@en ;
+    cm:hasStereotype "enumeration" ;
+    owl:oneOf ( cm:praises cm:criticizes cm:supports cm:disagreesWith cm:questions cm:clarifies cm:cites cm:mentions cm:requests cm:reports ) .
+
+cm:InteractionNorm a owl:Class ;
+    rdfs:label "Interaction Norm"@en ;
+    rdfs:comment "A social object expressing a norm governing an interaction situation."@en ;
+    cm:hasStereotype "kind" .
+
+cm:Situation a owl:Class ;
+    rdfs:label "Situation"@en ;
+    rdfs:comment "A contextual situation in which a Comment event occurs."@en ;
+    cm:hasStereotype "situation" .
+
+cm:Medium a owl:Class ;
+    rdfs:label "Medium"@en ;
+    rdfs:comment "A category covering communication channels, platforms, or services through which Comment events occur."@en ;
+    cm:hasStereotype "category" .
+
+cm:CommentMessage a owl:Class ;
+    rdfs:label "Comment Message"@en ;
+    rdfs:comment "A representation-neutral information object carrying the semantic message associated with a Comment event."@en ;
+    cm:hasStereotype "kind" .
+
+cm:Intent a owl:Class ;
+    rdfs:label "Intent"@en ;
+    rdfs:comment "An intrinsic mode representing motivational orientation."@en ;
+    cm:hasStereotype "mode" .
+
+cm:Stance a owl:Class ;
+    rdfs:label "Stance"@en ;
+    rdfs:comment "An intrinsic mode representing an evaluative or attitudinal orientation; raw ratings are not identical to Stance."@en ;
+    cm:hasStereotype "mode" .
+
+cm:ExpressionStyle a owl:Class ;
+    rdfs:label "Expression Style"@en ;
+    rdfs:comment "A quality characterizing the expressive manifestation of a CommentMessage."@en ;
+    cm:hasStereotype "quality" .
+
+### Temporal datatype
+
+cm:Time a rdfs:Datatype ;
+    rdfs:label "Time"@en ;
+    rdfs:comment "Canonical temporal qualification for a Comment occurrence, normalized as xsd:dateTime in the v2 Core implementation."@en ;
+    cm:hasStereotype "datatype" ;
+    owl:equivalentClass xsd:dateTime .
+
+### AssertedRelationKind enumeration individuals
+
+cm:praises a owl:NamedIndividual, cm:AssertedRelationKind .
+cm:criticizes a owl:NamedIndividual, cm:AssertedRelationKind .
+cm:supports a owl:NamedIndividual, cm:AssertedRelationKind .
+cm:disagreesWith a owl:NamedIndividual, cm:AssertedRelationKind .
+cm:questions a owl:NamedIndividual, cm:AssertedRelationKind .
+cm:clarifies a owl:NamedIndividual, cm:AssertedRelationKind .
+cm:cites a owl:NamedIndividual, cm:AssertedRelationKind .
+cm:mentions a owl:NamedIndividual, cm:AssertedRelationKind .
+cm:requests a owl:NamedIndividual, cm:AssertedRelationKind .
+cm:reports a owl:NamedIndividual, cm:AssertedRelationKind .
+
+[] a owl:AllDifferent ;
+   owl:distinctMembers ( cm:praises cm:criticizes cm:supports cm:disagreesWith cm:questions cm:clarifies cm:cites cm:mentions cm:requests cm:reports ) .
+
+### Event/content and structural relations
+
+cm:hasMessage a owl:ObjectProperty, owl:FunctionalProperty ; rdfs:domain cm:Comment ; rdfs:range cm:CommentMessage .
+
+cm:anchors a owl:ObjectProperty ;
+    rdfs:domain cm:Commentable ; rdfs:range cm:Comment ;
+    rdfs:comment "Formal OntoUML participation direction. The inverse anchoredTo is the domain-facing surface property."@en ;
+    owl:inverseOf cm:anchoredTo .
+cm:anchoredTo a owl:ObjectProperty ; rdfs:domain cm:Comment ; rdfs:range cm:Commentable .
+
+cm:mediumParticipatesIn a owl:ObjectProperty ; rdfs:domain cm:Medium ; rdfs:range cm:Comment ; owl:inverseOf cm:via .
+cm:via a owl:ObjectProperty ; rdfs:domain cm:Comment ; rdfs:range cm:Medium .
+
+cm:authors a owl:ObjectProperty ; rdfs:domain cm:Commenter ; rdfs:range cm:Comment ; owl:inverseOf cm:hasCommenter .
+cm:hasCommenter a owl:ObjectProperty ; rdfs:domain cm:Comment ; rdfs:range cm:Commenter .
+
+cm:occursIn a owl:ObjectProperty ; rdfs:domain cm:Comment ; rdfs:range cm:Situation .
+cm:hasTime a owl:DatatypeProperty, owl:FunctionalProperty ; rdfs:domain cm:Comment ; rdfs:range cm:Time .
+
+cm:styleInheresIn a owl:ObjectProperty ; rdfs:domain cm:ExpressionStyle ; rdfs:range cm:CommentMessage ; owl:inverseOf cm:hasExpressionStyle .
+cm:hasExpressionStyle a owl:ObjectProperty ; rdfs:domain cm:CommentMessage ; rdfs:range cm:ExpressionStyle .
+
+cm:respondsTo a owl:ObjectProperty, owl:IrreflexiveProperty ;
+    rdfs:domain cm:Response ; rdfs:range cm:Comment ;
+    rdfs:comment "Links a Response event to a prior Comment event; distinct from structural anchoring."@en .
+cm:partOfThread a owl:ObjectProperty ; rdfs:domain cm:Comment ; rdfs:range cm:CommentThread .
+
+### Derived semantic target views
+
+cm:addresses a owl:ObjectProperty ; rdfs:domain cm:Comment ; rdfs:range cm:IntendedAudience .
+cm:isAbout a owl:ObjectProperty ; rdfs:domain cm:Comment ; rdfs:range cm:CommentSubject .
+cm:refersTo a owl:ObjectProperty ; rdfs:domain cm:CommentMessage ; rdfs:range cm:ReferencedEntity .
+
+### Intentional/contextual relations
+
+cm:intentInheresIn a owl:ObjectProperty, owl:FunctionalProperty ; rdfs:domain cm:Intent ; rdfs:range cm:Agent .
+cm:stanceInheresIn a owl:ObjectProperty, owl:FunctionalProperty ; rdfs:domain cm:Stance ; rdfs:range cm:Agent .
+cm:motivatedBy a owl:ObjectProperty ; rdfs:domain cm:Comment ; rdfs:range cm:Intent .
+cm:reflects a owl:ObjectProperty ; rdfs:domain cm:Comment ; rdfs:range cm:Stance .
+cm:governedBy a owl:ObjectProperty ; rdfs:domain cm:Situation ; rdfs:range cm:InteractionNorm .
+
+### Interpretation relations
+
+cm:performsInterpretation a owl:ObjectProperty ; rdfs:domain cm:Agent ; rdfs:range cm:Interpretation ; owl:inverseOf cm:performedBy .
+cm:performedBy a owl:ObjectProperty ; rdfs:domain cm:Interpretation ; rdfs:range cm:Agent .
+
+cm:messageParticipatesInInterpretation a owl:ObjectProperty ; rdfs:domain cm:CommentMessage ; rdfs:range cm:Interpretation ; owl:inverseOf cm:interpretsMessage .
+cm:interpretsMessage a owl:ObjectProperty, owl:FunctionalProperty ; rdfs:domain cm:Interpretation ; rdfs:range cm:CommentMessage .
+
+cm:producesMeaning a owl:ObjectProperty ; rdfs:domain cm:Interpretation ; rdfs:range cm:InterpretedMeaning .
+
+cm:assumptionUsedIn a owl:ObjectProperty ; rdfs:domain cm:InterpretiveAssumption ; rdfs:range cm:Interpretation ; owl:inverseOf cm:basedOn .
+cm:basedOn a owl:ObjectProperty ; rdfs:domain cm:Interpretation ; rdfs:range cm:InterpretiveAssumption .
+cm:groundedIn a owl:ObjectProperty ; rdfs:domain cm:InterpretedMeaning ; rdfs:range cm:InterpretiveAssumption .
+
+### Asserted-content relations
+
+cm:assertedIn a owl:ObjectProperty, owl:FunctionalProperty ; rdfs:domain cm:AssertedRelation ; rdfs:range cm:CommentMessage .
+cm:involvesSubject a owl:ObjectProperty ; rdfs:domain cm:AssertedRelation ; rdfs:range cm:CommentSubject .
+cm:involvesReference a owl:ObjectProperty ; rdfs:domain cm:AssertedRelation ; rdfs:range cm:ReferencedEntity .
+cm:typedAs a owl:ObjectProperty, owl:FunctionalProperty ; rdfs:domain cm:AssertedRelation ; rdfs:range cm:AssertedRelationKind .
+
+### Deprecated v1 vocabulary
+
+cm:playedBy a owl:ObjectProperty ;
+    owl:deprecated true ;
+    cm:replacementNote "Removed from the v2 conceptual Core: roles classify their bearers rather than being reified as separate role individuals."@en .
+
+cm:memberOf a owl:ObjectProperty ;
+    owl:deprecated true ;
+    cm:replacementNote "Replaced in v2 by partOfThread because Comment and CommentThread are events and the relation is event decomposition, not collective membership."@en .
+
+cm:isAboutOrDirectedTo a owl:ObjectProperty ;
+    owl:deprecated true ;
+    cm:replacementNote "Split in v2: use isAbout for semantic subject and addresses for intended audience/addressee."@en .

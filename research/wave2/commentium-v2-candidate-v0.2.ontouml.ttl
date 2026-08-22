@@ -1,0 +1,154 @@
+@prefix : <https://w3id.org/commentium/model/v2#> .
+@prefix ontouml: <https://w3id.org/ontouml#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+<https://w3id.org/commentium/model/v2/> a ontouml:Project ;
+  ontouml:name "Commentium v2 Candidate Model v0.2"@en ;
+  ontouml:model :Core .
+
+:Core a ontouml:Package ; ontouml:name "Commentium Core"@en .
+
+:Comment a ontouml:Class ; ontouml:name "Comment"@en ; ontouml:stereotype ontouml:event ; ontouml:restrictedTo ontouml:event ; ontouml:isDerived false .
+:Response a ontouml:Class ; ontouml:name "Response"@en ; ontouml:stereotype ontouml:event ; ontouml:restrictedTo ontouml:event ; ontouml:isDerived false .
+:CommentThread a ontouml:Class ; ontouml:name "CommentThread"@en ; ontouml:stereotype ontouml:event ; ontouml:restrictedTo ontouml:event ; ontouml:isDerived false .
+:Commentable a ontouml:Class ; ontouml:name "Commentable"@en ; ontouml:stereotype ontouml:historicalRoleMixin ; ontouml:restrictedTo ontouml:functionalComplex ; ontouml:isDerived true .
+:Agent a ontouml:Class ; ontouml:name "Agent"@en ; ontouml:stereotype ontouml:category ; ontouml:restrictedTo ontouml:functionalComplex ; ontouml:isDerived false .
+:Commenter a ontouml:Class ; ontouml:name "Commenter"@en ; ontouml:stereotype ontouml:historicalRoleMixin ; ontouml:restrictedTo ontouml:functionalComplex ; ontouml:isDerived true .
+:IntendedAudience a ontouml:Class ; ontouml:name "IntendedAudience"@en ; ontouml:stereotype ontouml:roleMixin ; ontouml:restrictedTo ontouml:functionalComplex ; ontouml:isDerived true .
+:CommentSubject a ontouml:Class ; ontouml:name "CommentSubject"@en ; ontouml:stereotype ontouml:roleMixin ; ontouml:restrictedTo ontouml:functionalComplex ; ontouml:isDerived true .
+:ReferencedEntity a ontouml:Class ; ontouml:name "ReferencedEntity"@en ; ontouml:stereotype ontouml:roleMixin ; ontouml:restrictedTo ontouml:functionalComplex ; ontouml:isDerived true .
+:Interpretation a ontouml:Class ; ontouml:name "Interpretation"@en ; ontouml:stereotype ontouml:event ; ontouml:restrictedTo ontouml:event ; ontouml:isDerived false .
+:InterpretedMeaning a ontouml:Class ; ontouml:name "InterpretedMeaning"@en ; ontouml:stereotype ontouml:kind ; ontouml:restrictedTo ontouml:functionalComplex ; rdfs:comment "Semantic nature: information object."@en .
+:InterpretiveAssumption a ontouml:Class ; ontouml:name "InterpretiveAssumption"@en ; ontouml:stereotype ontouml:kind ; ontouml:restrictedTo ontouml:functionalComplex ; rdfs:comment "Semantic nature: information object."@en .
+:AssertedRelation a ontouml:Class ; ontouml:name "AssertedRelation"@en ; ontouml:stereotype ontouml:kind ; ontouml:restrictedTo ontouml:functionalComplex ; rdfs:comment "Semantic nature: propositional information object."@en .
+:AssertedRelationKind a ontouml:Class ; ontouml:name "AssertedRelationKind"@en ; ontouml:stereotype ontouml:enumeration ; ontouml:restrictedTo ontouml:abstract .
+:InteractionNorm a ontouml:Class ; ontouml:name "InteractionNorm"@en ; ontouml:stereotype ontouml:kind ; ontouml:restrictedTo ontouml:functionalComplex ; rdfs:comment "Semantic nature: social object."@en .
+:Situation a ontouml:Class ; ontouml:name "Situation"@en ; ontouml:stereotype ontouml:situation ; ontouml:restrictedTo ontouml:situation .
+:Medium a ontouml:Class ; ontouml:name "Medium"@en ; ontouml:stereotype ontouml:category ; ontouml:restrictedTo ontouml:functionalComplex .
+:CommentMessage a ontouml:Class ; ontouml:name "CommentMessage"@en ; ontouml:stereotype ontouml:kind ; ontouml:restrictedTo ontouml:functionalComplex ; rdfs:comment "Semantic nature: information object; representation-neutral and potentially multimodal."@en .
+:Intent a ontouml:Class ; ontouml:name "Intent"@en ; ontouml:stereotype ontouml:mode ; ontouml:restrictedTo ontouml:intrinsicMode .
+:Stance a ontouml:Class ; ontouml:name "Stance"@en ; ontouml:stereotype ontouml:mode ; ontouml:restrictedTo ontouml:intrinsicMode .
+:ExpressionStyle a ontouml:Class ; ontouml:name "ExpressionStyle"@en ; ontouml:stereotype ontouml:quality ; ontouml:restrictedTo ontouml:quality .
+:Time a ontouml:Class ; ontouml:name "Time"@en ; ontouml:stereotype ontouml:quality ; ontouml:restrictedTo ontouml:quality .
+
+:gen_Response_Comment a ontouml:Generalization ; ontouml:specific :Response ; ontouml:general :Comment .
+:gen_Commenter_Agent a ontouml:Generalization ; ontouml:specific :Commenter ; ontouml:general :Agent .
+
+:ark_praises a ontouml:Literal ; ontouml:name "praises"@en .
+:ark_criticizes a ontouml:Literal ; ontouml:name "criticizes"@en .
+:ark_supports a ontouml:Literal ; ontouml:name "supports"@en .
+:ark_disagreesWith a ontouml:Literal ; ontouml:name "disagreesWith"@en .
+:ark_questions a ontouml:Literal ; ontouml:name "questions"@en .
+:ark_clarifies a ontouml:Literal ; ontouml:name "clarifies"@en .
+:ark_cites a ontouml:Literal ; ontouml:name "cites"@en .
+:ark_mentions a ontouml:Literal ; ontouml:name "mentions"@en .
+:ark_requests a ontouml:Literal ; ontouml:name "requests"@en .
+:ark_reports a ontouml:Literal ; ontouml:name "reports"@en .
+:AssertedRelationKind ontouml:literal :ark_praises, :ark_criticizes, :ark_supports, :ark_disagreesWith, :ark_questions, :ark_clarifies, :ark_cites, :ark_mentions, :ark_requests, :ark_reports .
+
+# Relation helper pattern: target-end cardinality denotes number of targets allowed per source instance.
+
+:rel_hasMessage a ontouml:Relation ; ontouml:name "hasMessage"@en ; ontouml:sourceEnd _:hasMessageS ; ontouml:targetEnd _:hasMessageT ; ontouml:relationEnd _:hasMessageS, _:hasMessageT .
+_:hasMessageS a ontouml:Property ; ontouml:propertyType :Comment .
+_:hasMessageT a ontouml:Property ; ontouml:propertyType :CommentMessage ; ontouml:cardinality [ a ontouml:Cardinality ; ontouml:cardinalityValue "1" ; ontouml:lowerBound "1" ; ontouml:upperBound "1" ] .
+
+:rel_anchoredTo a ontouml:Relation ; ontouml:name "anchoredTo"@en ; ontouml:stereotype ontouml:participation ; ontouml:sourceEnd _:anchoredToS ; ontouml:targetEnd _:anchoredToT ; ontouml:relationEnd _:anchoredToS, _:anchoredToT .
+_:anchoredToS a ontouml:Property ; ontouml:propertyType :Comment .
+_:anchoredToT a ontouml:Property ; ontouml:propertyType :Commentable ; ontouml:cardinality [ a ontouml:Cardinality ; ontouml:cardinalityValue "1..*" ; ontouml:lowerBound "1" ; ontouml:upperBound "*" ] .
+
+:rel_occursIn a ontouml:Relation ; ontouml:name "occursIn"@en ; ontouml:sourceEnd _:occursInS ; ontouml:targetEnd _:occursInT ; ontouml:relationEnd _:occursInS, _:occursInT .
+_:occursInS a ontouml:Property ; ontouml:propertyType :Comment .
+_:occursInT a ontouml:Property ; ontouml:propertyType :Situation ; ontouml:cardinality [ a ontouml:Cardinality ; ontouml:cardinalityValue "1..*" ; ontouml:lowerBound "1" ; ontouml:upperBound "*" ] .
+
+:rel_via a ontouml:Relation ; ontouml:name "via"@en ; ontouml:stereotype ontouml:participation ; ontouml:sourceEnd _:viaS ; ontouml:targetEnd _:viaT ; ontouml:relationEnd _:viaS, _:viaT .
+_:viaS a ontouml:Property ; ontouml:propertyType :Comment .
+_:viaT a ontouml:Property ; ontouml:propertyType :Medium ; ontouml:cardinality [ a ontouml:Cardinality ; ontouml:cardinalityValue "1..*" ; ontouml:lowerBound "1" ; ontouml:upperBound "*" ] .
+
+:rel_hasTime a ontouml:Relation ; ontouml:name "hasTime"@en ; ontouml:sourceEnd _:hasTimeS ; ontouml:targetEnd _:hasTimeT ; ontouml:relationEnd _:hasTimeS, _:hasTimeT .
+_:hasTimeS a ontouml:Property ; ontouml:propertyType :Comment .
+_:hasTimeT a ontouml:Property ; ontouml:propertyType :Time ; ontouml:cardinality [ a ontouml:Cardinality ; ontouml:cardinalityValue "1" ; ontouml:lowerBound "1" ; ontouml:upperBound "1" ] .
+
+:rel_styleInheresIn a ontouml:Relation ; ontouml:name "styleInheresIn"@en ; ontouml:stereotype ontouml:characterization ; ontouml:sourceEnd _:styleS ; ontouml:targetEnd _:styleT ; ontouml:relationEnd _:styleS, _:styleT .
+_:styleS a ontouml:Property ; ontouml:propertyType :ExpressionStyle .
+_:styleT a ontouml:Property ; ontouml:propertyType :CommentMessage ; ontouml:cardinality [ a ontouml:Cardinality ; ontouml:cardinalityValue "1" ; ontouml:lowerBound "1" ; ontouml:upperBound "1" ] .
+
+:rel_respondsTo a ontouml:Relation ; ontouml:name "respondsTo"@en ; ontouml:stereotype ontouml:historicalDependence ; ontouml:sourceEnd _:respondsS ; ontouml:targetEnd _:respondsT ; ontouml:relationEnd _:respondsS, _:respondsT .
+_:respondsS a ontouml:Property ; ontouml:propertyType :Response .
+_:respondsT a ontouml:Property ; ontouml:propertyType :Comment ; ontouml:cardinality [ a ontouml:Cardinality ; ontouml:cardinalityValue "1..*" ; ontouml:lowerBound "1" ; ontouml:upperBound "*" ] .
+
+:rel_partOfThread a ontouml:Relation ; ontouml:name "partOfThread"@en ; ontouml:stereotype ontouml:participational ; ontouml:sourceEnd _:threadS ; ontouml:targetEnd _:threadT ; ontouml:relationEnd _:threadS, _:threadT .
+_:threadS a ontouml:Property ; ontouml:propertyType :Comment .
+_:threadT a ontouml:Property ; ontouml:propertyType :CommentThread ; ontouml:cardinality [ a ontouml:Cardinality ; ontouml:cardinalityValue "0..*" ; ontouml:lowerBound "0" ; ontouml:upperBound "*" ] .
+
+:rel_hasCommenter a ontouml:Relation ; ontouml:name "hasCommenter"@en ; ontouml:stereotype ontouml:participation ; ontouml:sourceEnd _:commenterS ; ontouml:targetEnd _:commenterT ; ontouml:relationEnd _:commenterS, _:commenterT .
+_:commenterS a ontouml:Property ; ontouml:propertyType :Comment .
+_:commenterT a ontouml:Property ; ontouml:propertyType :Commenter ; ontouml:cardinality [ a ontouml:Cardinality ; ontouml:cardinalityValue "1..*" ; ontouml:lowerBound "1" ; ontouml:upperBound "*" ] .
+
+:rel_addresses a ontouml:Relation ; ontouml:name "addresses"@en ; ontouml:isDerived true ; ontouml:sourceEnd _:addressesS ; ontouml:targetEnd _:addressesT ; ontouml:relationEnd _:addressesS, _:addressesT .
+_:addressesS a ontouml:Property ; ontouml:propertyType :Comment .
+_:addressesT a ontouml:Property ; ontouml:propertyType :IntendedAudience ; ontouml:cardinality [ a ontouml:Cardinality ; ontouml:cardinalityValue "0..*" ; ontouml:lowerBound "0" ; ontouml:upperBound "*" ] .
+
+:rel_isAbout a ontouml:Relation ; ontouml:name "isAbout"@en ; ontouml:isDerived true ; ontouml:sourceEnd _:isAboutS ; ontouml:targetEnd _:isAboutT ; ontouml:relationEnd _:isAboutS, _:isAboutT .
+_:isAboutS a ontouml:Property ; ontouml:propertyType :Comment .
+_:isAboutT a ontouml:Property ; ontouml:propertyType :CommentSubject ; ontouml:cardinality [ a ontouml:Cardinality ; ontouml:cardinalityValue "0..*" ; ontouml:lowerBound "0" ; ontouml:upperBound "*" ] .
+
+:rel_refersTo a ontouml:Relation ; ontouml:name "refersTo"@en ; ontouml:isDerived true ; ontouml:sourceEnd _:refersS ; ontouml:targetEnd _:refersT ; ontouml:relationEnd _:refersS, _:refersT .
+_:refersS a ontouml:Property ; ontouml:propertyType :CommentMessage .
+_:refersT a ontouml:Property ; ontouml:propertyType :ReferencedEntity ; ontouml:cardinality [ a ontouml:Cardinality ; ontouml:cardinalityValue "0..*" ; ontouml:lowerBound "0" ; ontouml:upperBound "*" ] .
+
+:rel_intentInheresIn a ontouml:Relation ; ontouml:name "intentInheresIn"@en ; ontouml:stereotype ontouml:characterization ; ontouml:sourceEnd _:intentS ; ontouml:targetEnd _:intentT ; ontouml:relationEnd _:intentS, _:intentT .
+_:intentS a ontouml:Property ; ontouml:propertyType :Intent .
+_:intentT a ontouml:Property ; ontouml:propertyType :Agent ; ontouml:cardinality [ a ontouml:Cardinality ; ontouml:cardinalityValue "1" ; ontouml:lowerBound "1" ; ontouml:upperBound "1" ] .
+
+:rel_stanceInheresIn a ontouml:Relation ; ontouml:name "stanceInheresIn"@en ; ontouml:stereotype ontouml:characterization ; ontouml:sourceEnd _:stanceS ; ontouml:targetEnd _:stanceT ; ontouml:relationEnd _:stanceS, _:stanceT .
+_:stanceS a ontouml:Property ; ontouml:propertyType :Stance .
+_:stanceT a ontouml:Property ; ontouml:propertyType :Agent ; ontouml:cardinality [ a ontouml:Cardinality ; ontouml:cardinalityValue "1" ; ontouml:lowerBound "1" ; ontouml:upperBound "1" ] .
+
+:rel_motivatedBy a ontouml:Relation ; ontouml:name "motivatedBy"@en ; ontouml:sourceEnd _:motivatedS ; ontouml:targetEnd _:motivatedT ; ontouml:relationEnd _:motivatedS, _:motivatedT .
+_:motivatedS a ontouml:Property ; ontouml:propertyType :Comment .
+_:motivatedT a ontouml:Property ; ontouml:propertyType :Intent ; ontouml:cardinality [ a ontouml:Cardinality ; ontouml:cardinalityValue "0..*" ; ontouml:lowerBound "0" ; ontouml:upperBound "*" ] .
+
+:rel_reflects a ontouml:Relation ; ontouml:name "reflects"@en ; ontouml:sourceEnd _:reflectsS ; ontouml:targetEnd _:reflectsT ; ontouml:relationEnd _:reflectsS, _:reflectsT .
+_:reflectsS a ontouml:Property ; ontouml:propertyType :Comment .
+_:reflectsT a ontouml:Property ; ontouml:propertyType :Stance ; ontouml:cardinality [ a ontouml:Cardinality ; ontouml:cardinalityValue "0..*" ; ontouml:lowerBound "0" ; ontouml:upperBound "*" ] .
+
+:rel_governedBy a ontouml:Relation ; ontouml:name "governedBy"@en ; ontouml:sourceEnd _:governedS ; ontouml:targetEnd _:governedT ; ontouml:relationEnd _:governedS, _:governedT .
+_:governedS a ontouml:Property ; ontouml:propertyType :Situation .
+_:governedT a ontouml:Property ; ontouml:propertyType :InteractionNorm ; ontouml:cardinality [ a ontouml:Cardinality ; ontouml:cardinalityValue "0..*" ; ontouml:lowerBound "0" ; ontouml:upperBound "*" ] .
+
+:rel_performedBy a ontouml:Relation ; ontouml:name "performedBy"@en ; ontouml:stereotype ontouml:participation ; ontouml:sourceEnd _:performedS ; ontouml:targetEnd _:performedT ; ontouml:relationEnd _:performedS, _:performedT .
+_:performedS a ontouml:Property ; ontouml:propertyType :Interpretation .
+_:performedT a ontouml:Property ; ontouml:propertyType :Agent ; ontouml:cardinality [ a ontouml:Cardinality ; ontouml:cardinalityValue "1..*" ; ontouml:lowerBound "1" ; ontouml:upperBound "*" ] .
+
+:rel_interpretsMessage a ontouml:Relation ; ontouml:name "interpretsMessage"@en ; ontouml:sourceEnd _:interpretsS ; ontouml:targetEnd _:interpretsT ; ontouml:relationEnd _:interpretsS, _:interpretsT .
+_:interpretsS a ontouml:Property ; ontouml:propertyType :Interpretation .
+_:interpretsT a ontouml:Property ; ontouml:propertyType :CommentMessage ; ontouml:cardinality [ a ontouml:Cardinality ; ontouml:cardinalityValue "1" ; ontouml:lowerBound "1" ; ontouml:upperBound "1" ] .
+
+:rel_producesMeaning a ontouml:Relation ; ontouml:name "producesMeaning"@en ; ontouml:stereotype ontouml:creation ; ontouml:sourceEnd _:producesS ; ontouml:targetEnd _:producesT ; ontouml:relationEnd _:producesS, _:producesT .
+_:producesS a ontouml:Property ; ontouml:propertyType :Interpretation .
+_:producesT a ontouml:Property ; ontouml:propertyType :InterpretedMeaning ; ontouml:cardinality [ a ontouml:Cardinality ; ontouml:cardinalityValue "1..*" ; ontouml:lowerBound "1" ; ontouml:upperBound "*" ] .
+
+:rel_basedOn a ontouml:Relation ; ontouml:name "basedOn"@en ; ontouml:sourceEnd _:basedS ; ontouml:targetEnd _:basedT ; ontouml:relationEnd _:basedS, _:basedT .
+_:basedS a ontouml:Property ; ontouml:propertyType :Interpretation .
+_:basedT a ontouml:Property ; ontouml:propertyType :InterpretiveAssumption ; ontouml:cardinality [ a ontouml:Cardinality ; ontouml:cardinalityValue "0..*" ; ontouml:lowerBound "0" ; ontouml:upperBound "*" ] .
+
+:rel_groundedIn a ontouml:Relation ; ontouml:name "groundedIn"@en ; ontouml:sourceEnd _:groundedS ; ontouml:targetEnd _:groundedT ; ontouml:relationEnd _:groundedS, _:groundedT .
+_:groundedS a ontouml:Property ; ontouml:propertyType :InterpretedMeaning .
+_:groundedT a ontouml:Property ; ontouml:propertyType :InterpretiveAssumption ; ontouml:cardinality [ a ontouml:Cardinality ; ontouml:cardinalityValue "0..*" ; ontouml:lowerBound "0" ; ontouml:upperBound "*" ] .
+
+:rel_assertedIn a ontouml:Relation ; ontouml:name "assertedIn"@en ; ontouml:sourceEnd _:assertedS ; ontouml:targetEnd _:assertedT ; ontouml:relationEnd _:assertedS, _:assertedT .
+_:assertedS a ontouml:Property ; ontouml:propertyType :AssertedRelation .
+_:assertedT a ontouml:Property ; ontouml:propertyType :CommentMessage ; ontouml:cardinality [ a ontouml:Cardinality ; ontouml:cardinalityValue "1" ; ontouml:lowerBound "1" ; ontouml:upperBound "1" ] .
+
+:rel_involvesSubject a ontouml:Relation ; ontouml:name "involvesSubject"@en ; ontouml:sourceEnd _:subjectS ; ontouml:targetEnd _:subjectT ; ontouml:relationEnd _:subjectS, _:subjectT .
+_:subjectS a ontouml:Property ; ontouml:propertyType :AssertedRelation .
+_:subjectT a ontouml:Property ; ontouml:propertyType :CommentSubject ; ontouml:cardinality [ a ontouml:Cardinality ; ontouml:cardinalityValue "0..*" ; ontouml:lowerBound "0" ; ontouml:upperBound "*" ] .
+
+:rel_involvesReference a ontouml:Relation ; ontouml:name "involvesReference"@en ; ontouml:sourceEnd _:referenceS ; ontouml:targetEnd _:referenceT ; ontouml:relationEnd _:referenceS, _:referenceT .
+_:referenceS a ontouml:Property ; ontouml:propertyType :AssertedRelation .
+_:referenceT a ontouml:Property ; ontouml:propertyType :ReferencedEntity ; ontouml:cardinality [ a ontouml:Cardinality ; ontouml:cardinalityValue "0..*" ; ontouml:lowerBound "0" ; ontouml:upperBound "*" ] .
+
+:rel_typedAs a ontouml:Relation ; ontouml:name "typedAs"@en ; ontouml:sourceEnd _:typedS ; ontouml:targetEnd _:typedT ; ontouml:relationEnd _:typedS, _:typedT .
+_:typedS a ontouml:Property ; ontouml:propertyType :AssertedRelation .
+_:typedT a ontouml:Property ; ontouml:propertyType :AssertedRelationKind ; ontouml:cardinality [ a ontouml:Cardinality ; ontouml:cardinalityValue "1" ; ontouml:lowerBound "1" ; ontouml:upperBound "1" ] .

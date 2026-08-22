@@ -1,0 +1,28 @@
+{
+  "id": "amazon-reviews-2023",
+  "adapter": "amazon_reviews_2023",
+  "role": "design",
+  "sourceDocumentation": [
+    "https://huggingface.co/datasets/McAuley-Lab/Amazon-Reviews-2023/blob/main/README.md",
+    "https://amazon-reviews-2023.github.io/"
+  ],
+  "schemaEvidenceDate": "2026-08-22",
+  "inputFixture": "mappings/design/examples/amazon-reviews-2023.synthetic.jsonl",
+  "output": "validation-results/mappings/amazon-reviews-2023.ttl",
+  "documentedFields": ["rating", "title", "text", "images", "asin", "parent_asin", "user_id", "timestamp", "verified_purchase", "helpful_vote"],
+  "coreMappings": {
+    "review occurrence": "cm:Comment",
+    "title/text/images": "cm:CommentMessage plus profile-level representation fields",
+    "user_id": "cm:Agent + cm:Commenter",
+    "parent_asin/asin": "cm:Commentable via cm:anchoredTo",
+    "reviewed product": "same resource may also be cm:CommentSubject via cm:isAbout",
+    "timestamp": "cm:hasTime xsd:dateTime",
+    "dataset/service": "cm:Medium via cm:via"
+  },
+  "profileOnlyFields": ["rating", "verified_purchase", "helpful_vote", "images"],
+  "policies": [
+    "Rating is observed source data and is not equated with cm:Stance.",
+    "Verified purchase and helpful votes remain provenance/feedback profile data.",
+    "Structural anchoring and semantic aboutness remain distinct even when they target the same product resource."
+  ]
+}

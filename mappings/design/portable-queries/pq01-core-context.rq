@@ -1,0 +1,11 @@
+PREFIX cm: <https://w3id.org/commentium#>
+SELECT ?comment ?message ?anchor ?commenter ?situation ?medium ?time
+WHERE {
+  ?comment cm:hasMessage ?message ;
+           cm:anchoredTo ?anchor ;
+           cm:hasCommenter ?commenter ;
+           cm:occursIn ?situation ;
+           cm:via ?medium ;
+           cm:hasTime ?time .
+}
+ORDER BY ?comment

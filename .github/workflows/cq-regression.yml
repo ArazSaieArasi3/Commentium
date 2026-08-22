@@ -1,0 +1,54 @@
+name: Competency Questions
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - journal-v2-discovery
+    paths:
+      - 'competency-questions/**'
+      - 'ontology/**'
+      - 'validation/commentium-v2.shacl.ttl'
+      - 'validation/examples/cq-regression-fixture.ttl'
+      - 'scripts/run_cq_suite.py'
+      - '.github/workflows/cq-regression.yml'
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'competency-questions/**'
+      - 'ontology/**'
+      - 'validation/commentium-v2.shacl.ttl'
+      - 'validation/examples/cq-regression-fixture.ttl'
+      - 'scripts/run_cq_suite.py'
+      - '.github/workflows/cq-regression.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  cq-regression:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install pinned semantic test toolchain
+        run: python -m pip install --disable-pip-version-check pyshacl==0.40.1
+
+      - name: Run executable competency questions
+        run: python scripts/run_cq_suite.py
+
+      - name: Upload CQ regression evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: commentium-cq-regression
+          path: validation-results/cq/**
+          if-no-files-found: warn

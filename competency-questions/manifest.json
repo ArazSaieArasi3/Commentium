@@ -1,0 +1,139 @@
+{
+  "suiteVersion": "0.1",
+  "ontology": "ontology/commentium-v2-candidate.ttl",
+  "data": "validation/examples/cq-regression-fixture.ttl",
+  "shapes": "validation/commentium-v2.shacl.ttl",
+  "requiredCoreConcepts": [
+    "Comment", "Response", "CommentThread", "Commentable", "Agent", "Commenter",
+    "IntendedAudience", "CommentSubject", "ReferencedEntity", "Interpretation",
+    "InterpretedMeaning", "InterpretiveAssumption", "AssertedRelation",
+    "AssertedRelationKind", "InteractionNorm", "Situation", "Medium", "CommentMessage",
+    "Intent", "Stance", "ExpressionStyle", "Time"
+  ],
+  "queries": [
+    {
+      "id": "CQ01", "category": "core-structure",
+      "question": "What message, structural anchor, commenter, situation, medium, and occurrence time characterize a Comment?",
+      "path": "competency-questions/queries/cq01-comment-context.rq", "form": "select",
+      "covers": ["Comment", "CommentMessage", "Commentable", "Commenter", "Situation", "Medium", "Time"],
+      "expectedColumns": ["message", "anchor", "commenter", "situation", "medium", "timeValue"],
+      "expectedRows": [["https://example.org/commentium-cq#message1", "https://example.org/commentium-cq#product1", "https://example.org/commentium-cq#user1", "https://example.org/commentium-cq#situation1", "https://example.org/commentium-cq#medium1", "2026-08-22T10:00:00+00:00"]]
+    },
+    {
+      "id": "CQ02", "category": "conversation",
+      "question": "Which Comment event is a Response to which prior Comment event?",
+      "path": "competency-questions/queries/cq02-response-predecessor.rq", "form": "select",
+      "covers": ["Response", "Comment"],
+      "expectedColumns": ["response", "predecessor"],
+      "expectedRows": [["https://example.org/commentium-cq#response1", "https://example.org/commentium-cq#comment1"]]
+    },
+    {
+      "id": "CQ03", "category": "conversation",
+      "question": "Which Comment events participate in the same CommentThread?",
+      "path": "competency-questions/queries/cq03-thread-participation.rq", "form": "select",
+      "covers": ["Comment", "CommentThread"],
+      "expectedColumns": ["comment"],
+      "expectedRows": [["https://example.org/commentium-cq#comment1"], ["https://example.org/commentium-cq#response1"]]
+    },
+    {
+      "id": "CQ04", "category": "semantic-targets",
+      "question": "Can the subject of a Comment, its intended audience, and an entity referenced in its message be represented distinctly?",
+      "path": "competency-questions/queries/cq04-semantic-targets.rq", "form": "select",
+      "covers": ["CommentSubject", "IntendedAudience", "ReferencedEntity", "CommentMessage", "Comment"],
+      "expectedColumns": ["subject", "audience", "reference"],
+      "expectedRows": [["https://example.org/commentium-cq#product1", "https://example.org/commentium-cq#audience1", "https://example.org/commentium-cq#reference1"]]
+    },
+    {
+      "id": "CQ05", "category": "interpretation",
+      "question": "Who performed an Interpretation, over which CommentMessage, and what InterpretedMeaning did it produce?",
+      "path": "competency-questions/queries/cq05-interpretation-provenance.rq", "form": "select",
+      "covers": ["Interpretation", "Agent", "CommentMessage", "InterpretedMeaning"],
+      "expectedColumns": ["interpretation", "agent", "message", "meaning"],
+      "expectedRows": [["https://example.org/commentium-cq#interpretation1", "https://example.org/commentium-cq#interpreter1", "https://example.org/commentium-cq#message1", "https://example.org/commentium-cq#meaning1"]]
+    },
+    {
+      "id": "CQ06", "category": "interpretation",
+      "question": "Which InterpretiveAssumption was used in an Interpretation and also grounds its produced meaning?",
+      "path": "competency-questions/queries/cq06-interpretive-assumptions.rq", "form": "select",
+      "covers": ["Interpretation", "InterpretedMeaning", "InterpretiveAssumption"],
+      "expectedColumns": ["interpretation", "meaning", "assumption"],
+      "expectedRows": [["https://example.org/commentium-cq#interpretation1", "https://example.org/commentium-cq#meaning1", "https://example.org/commentium-cq#assumption1"]]
+    },
+    {
+      "id": "CQ07", "category": "asserted-content",
+      "question": "What AssertedRelations are materialized from a message, what kinds do they have, and what subject/reference do they involve?",
+      "path": "competency-questions/queries/cq07-asserted-relations.rq", "form": "select",
+      "covers": ["AssertedRelation", "AssertedRelationKind", "CommentSubject", "ReferencedEntity", "CommentMessage"],
+      "expectedColumns": ["assertion", "kind", "subject", "reference"],
+      "expectedRows": [
+        ["https://example.org/commentium-cq#assertion1", "https://w3id.org/commentium#cites", "https://example.org/commentium-cq#product1", "https://example.org/commentium-cq#reference1"],
+        ["https://example.org/commentium-cq#assertion2", "https://w3id.org/commentium#questions", "https://example.org/commentium-cq#product1", null]
+      ]
+    },
+    {
+      "id": "CQ08", "category": "asserted-content",
+      "question": "Which citation assertions identify a ReferencedEntity?",
+      "path": "competency-questions/queries/cq08-citation-reference.rq", "form": "select",
+      "covers": ["AssertedRelation", "AssertedRelationKind", "ReferencedEntity"],
+      "expectedColumns": ["assertion", "reference"],
+      "expectedRows": [["https://example.org/commentium-cq#assertion1", "https://example.org/commentium-cq#reference1"]]
+    },
+    {
+      "id": "CQ09", "category": "intentional",
+      "question": "What Intent motivates a Comment, what Stance does it reflect, and which Agent bears each intrinsic mode?",
+      "path": "competency-questions/queries/cq09-intent-and-stance.rq", "form": "select",
+      "covers": ["Comment", "Intent", "Stance", "Agent"],
+      "expectedColumns": ["intent", "intentBearer", "stance", "stanceBearer"],
+      "expectedRows": [["https://example.org/commentium-cq#intent1", "https://example.org/commentium-cq#user1", "https://example.org/commentium-cq#stance1", "https://example.org/commentium-cq#user1"]]
+    },
+    {
+      "id": "CQ10", "category": "expression",
+      "question": "What ExpressionStyle characterizes the CommentMessage created by a Comment?",
+      "path": "competency-questions/queries/cq10-expression-style.rq", "form": "select",
+      "covers": ["ExpressionStyle", "CommentMessage", "Comment"],
+      "expectedColumns": ["message", "style"],
+      "expectedRows": [["https://example.org/commentium-cq#message1", "https://example.org/commentium-cq#style1"]]
+    },
+    {
+      "id": "CQ11", "category": "governance",
+      "question": "Which InteractionNorm governs the Situation in which a Comment occurs?",
+      "path": "competency-questions/queries/cq11-governing-norm.rq", "form": "select",
+      "covers": ["InteractionNorm", "Situation", "Comment"],
+      "expectedColumns": ["situation", "norm"],
+      "expectedRows": [["https://example.org/commentium-cq#situation1", "https://example.org/commentium-cq#norm1"]]
+    },
+    {
+      "id": "CQ12", "category": "semantic-separation",
+      "question": "Can a Response's persistent structural anchor be distinguished from the prior Comment event it responds to?",
+      "path": "competency-questions/queries/cq12-anchor-vs-reply-target.rq", "form": "select",
+      "covers": ["Response", "Comment", "Commentable"],
+      "expectedColumns": ["anchor", "predecessor"],
+      "expectedRows": [["https://example.org/commentium-cq#post1", "https://example.org/commentium-cq#comment1"]]
+    },
+    {
+      "id": "CQ13", "category": "integration",
+      "question": "Which comments occurred through a given Medium and who were their Commenters?",
+      "path": "competency-questions/queries/cq13-medium-and-commenter.rq", "form": "select",
+      "covers": ["Comment", "Medium", "Commenter"],
+      "expectedColumns": ["comment", "commenter"],
+      "expectedRows": [
+        ["https://example.org/commentium-cq#comment1", "https://example.org/commentium-cq#user1"],
+        ["https://example.org/commentium-cq#response1", "https://example.org/commentium-cq#user2"]
+      ]
+    },
+    {
+      "id": "CQ14", "category": "migration-regression",
+      "question": "Does the v2 regression data avoid the retired v1 properties playedBy, memberOf, and isAboutOrDirectedTo?",
+      "path": "competency-questions/queries/cq14-no-retired-vocabulary.rq", "form": "ask",
+      "covers": ["Comment", "CommentThread"],
+      "expected": false
+    },
+    {
+      "id": "CQ15", "category": "semantic-separation",
+      "question": "Does a representative Response use distinct values for structural anchoring and reply-event targeting?",
+      "path": "competency-questions/queries/cq15-response-distinguishes-anchor.rq", "form": "ask",
+      "covers": ["Response", "Comment", "Commentable"],
+      "expected": true
+    }
+  ]
+}

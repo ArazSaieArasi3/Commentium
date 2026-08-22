@@ -1,0 +1,29 @@
+{
+  "id": "reddit-convokit",
+  "adapter": "reddit_convokit",
+  "role": "design",
+  "sourceDocumentation": [
+    "https://convokit.cornell.edu/documentation/subreddit.html",
+    "https://convokit.cornell.edu/documentation/data_format.html"
+  ],
+  "schemaEvidenceDate": "2026-08-22",
+  "inputFixture": "mappings/design/examples/reddit-convokit.synthetic.jsonl",
+  "output": "validation-results/mappings/reddit-convokit.ttl",
+  "documentedFields": ["id", "speaker", "conversation_id", "reply_to", "timestamp", "text", "meta.score", "meta.top_level_comment"],
+  "coreMappings": {
+    "comment utterance": "cm:Comment; cm:Response only for reply_to targeting a mapped prior comment",
+    "text": "cm:CommentMessage",
+    "speaker": "cm:Agent + cm:Commenter",
+    "conversation_id root": "persistent structural host resource classified cm:Commentable",
+    "reply_to comment": "cm:respondsTo prior cm:Comment",
+    "conversation grouping": "cm:CommentThread via cm:partOfThread",
+    "timestamp": "cm:hasTime xsd:dateTime",
+    "dataset/service": "cm:Medium via cm:via"
+  },
+  "profileOnlyFields": ["score", "top_level_comment", "subreddit/venue metadata"],
+  "policies": [
+    "A top-level comment replying to the Reddit post is not modeled as a Response to a Comment event.",
+    "No semantic subject or intended audience is inferred without independent evidence.",
+    "Score/upvotes remain feedback profile data."
+  ]
+}
